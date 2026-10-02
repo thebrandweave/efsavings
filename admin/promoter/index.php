@@ -330,6 +330,10 @@ include("../components/topbar.php");
             --pr_shadow-md: 0 4px 10px rgba(0, 0, 0, 0.08);
             --pr_transition: 0.25s;
         }
+        
+        .content-wrapper{
+            font-family: 'Poppins', sans-serif;
+        }
 
         .content-card {
             background: white;
@@ -337,6 +341,7 @@ include("../components/topbar.php");
             box-shadow: var(--pr_shadow-sm);
             overflow: hidden;
             margin-bottom: 30px;
+            
         }
 
         .card-header {

@@ -309,6 +309,9 @@ include("../components/topbar.php");
             transition: all 0.3s ease;
             border-left: 4px solid transparent;
         }
+         .content-wrapper{
+            font-family: 'Poppins', sans-serif;
+        }
 
         .payment-card:hover {
             transform: translateY(-3px);

@@ -48,6 +48,7 @@ button, .navbar-btn, .login-btn, input, select, textarea {
     align-items: center;
     padding: 7px 4vw 7px 4vw;
     border-bottom: 1px solid #ececec;
+    font-family: 'Poppins', sans-serif;
 }
 .topbar-left span {
     margin-right: 24px;

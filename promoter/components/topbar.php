@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
     :root {
         --topbar-height: 70px;
@@ -30,6 +30,7 @@
         transition: left var(--transition-speed) ease;
         border-bottom: 1px solid var(--topborder-color);
         border-top: 3px solid #10B981;
+        font-family: 'Poppins', sans-serif;
     }
 
     .content-wrapper {

@@ -193,7 +193,7 @@ include("../components/topbar.php");
 
         * {
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            
         }
 
         body {
@@ -207,6 +207,7 @@ include("../components/topbar.php");
             padding: 24px 28px 40px;
             max-width: 1400px;
             margin: 0 auto;
+            font-family: 'Poppins', sans-serif;
         }
 
         /* Page Header */

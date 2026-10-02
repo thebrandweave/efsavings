@@ -117,6 +117,9 @@ include($menuPath . "components/topbar.php");
             --cm_gradient: linear-gradient(135deg, #9B0090 0%, #0B5CAD 100%);
             --cm_gradient_hover: linear-gradient(135deg, #b800aa 0%, #0d6ed0 100%);
         }
+         .content-wrapper{
+            font-family: 'Poppins', sans-serif;
+        }
         .commission-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         .commission-table th, .commission-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #e0e0e0; font-size: 14px; }
         .commission-table th { background: #f4f8fb; color: #34495e; font-weight: 600; }

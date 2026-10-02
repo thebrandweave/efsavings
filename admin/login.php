@@ -251,7 +251,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: radial-gradient(circle at 10% 20%, rgba(155, 0, 144, 0.15) 0%, transparent 40%),
                         radial-gradient(circle at 90% 80%, rgba(11, 92, 173, 0.15) 0%, transparent 40%),
-                        linear-gradient(135deg, #0B0F19 0%, #151D2A 100%);
+                        linear-gradient(135deg, #c4c8d3 0%, #58004d 100%);
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
@@ -494,10 +494,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="logo-box">
                 <img src="../landing/landing_assets/images/liyas_logo_white.png" alt="Liya's Furniture & Electronics Logo">
             </div>
-            <div class="role-badge">
-                <i class="fas fa-shield-halved"></i> Admin Console
-            </div>
-            <h1>Administrative Sign In</h1>
+           
+            <h1>Admin Sign In</h1>
             <p>A Unit of Pro Gee Dee Ventures Pvt. Ltd.</p>
         </div>
 
@@ -544,7 +542,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <button type="submit" class="login-btn">
                     <i class="fas fa-sign-in-alt"></i>
-                    <span>Sign In to Console</span>
+                    <span>Sign In </span>
                 </button>
             </form>
 

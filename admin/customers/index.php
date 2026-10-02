@@ -601,6 +601,10 @@ include("../components/topbar.php");
             box-shadow: 0 2px 6px rgba(155, 0, 144, 0.25);
         }
 
+        .content-wrapper{
+            font-family: 'Poppins', sans-serif;
+        }
+
         .add-customer-btn:hover {
             transform: translateY(-2px);
             background: linear-gradient(135deg, #b800aa 0%, #0d6ed0 100%);

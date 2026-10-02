@@ -128,6 +128,9 @@ include("../components/topbar.php");
         .content-wrapper {
             padding: 20px;
         }
+         .content-wrapper{
+            font-family: 'Poppins', sans-serif;
+        }
 
         .page-header {
             display: flex;

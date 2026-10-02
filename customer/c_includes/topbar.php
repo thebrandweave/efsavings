@@ -34,6 +34,9 @@ if (empty($profileImageUrl)) {
     $profileImageUrl = $c_path . 'uploads/default-avatar.png';
 }
 ?>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 
 <nav class="topbar">
     <div class="topbar-content">
@@ -65,6 +68,10 @@ if (empty($profileImageUrl)) {
 </nav>
 
 <style>
+
+    *{
+        font-family: 'Poppins', sans-serif;
+    }
     .topbar {
         background: #071220;
         padding: 15px 24px;
@@ -76,6 +83,7 @@ if (empty($profileImageUrl)) {
         border-bottom: 1px solid rgba(2, 132, 199, 0.22);
         border-top: 3px solid #0284C7;
         height: 70px;
+        
     }
 
     .topbar-content {
