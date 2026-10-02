@@ -23,14 +23,14 @@ if (isLoggedIn()) {
             --card-bg: #0c1e34;
             --accent-brand: #0284c7;
             --accent-blue: #0369a1;
-            --brand-gradient: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            --brand-gradient: linear-gradient(135deg, #5b70a3 0%, #000000 100%);
             --text-primary: rgba(255, 255, 255, 0.9);
             --text-secondary: rgba(255, 255, 255, 0.7);
             --border-color: rgba(2, 132, 199, 0.22);
         }
 
         body {
-            background: linear-gradient(135deg, #0B0F19 0%, #161F30 100%);
+            background: linear-gradient(135deg, #5b70a3 0%, #000000 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -200,11 +200,9 @@ if (isLoggedIn()) {
     <?php include '../c_includes/loader.php'; ?>
     <div class="login-container">
         <div class="logo">
-            <img src="../uploads/liyas_logo_white.png" alt="Liya's Furniture & Electronics Logo">
+            <img src="../../landing/landing_assets/images/liyas_logo_white.png"" alt="Liya's Furniture & Electronics Logo">
             <div style="margin-top: 6px; margin-bottom: 8px;">
-                <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(2, 132, 199, 0.16); border: 1px solid rgba(2, 132, 199, 0.4); color: #38bdf8; font-size: 0.75rem; font-weight: 700; padding: 4px 14px; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.8px;">
-                    <i class="fas fa-gem"></i> Customer Portal
-                </span>
+              
             </div>
             <h1 style="font-size:1.35rem; font-weight:700; color:#fff; margin-bottom: 4px;">Customer Sign In</h1>
             <p class="text-muted small m-0" style="color: var(--text-secondary) !important;">A Unit of Pro Gee Dee Ventures Pvt. Ltd.</p>

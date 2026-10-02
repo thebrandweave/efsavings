@@ -99,12 +99,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --brand-magenta: #10B981;
-            --brand-blue: #059669;
-            --brand-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            --brand-gradient-hover: linear-gradient(135deg, #059669 0%, #047857 100%);
+            --brand-magenta: #1045b9;
+            --brand-blue: #055296;
+            --brand-gradient: linear-gradient(135deg, #c099bd 0%, #0b5cad 100%);
+            --brand-gradient-hover: linear-gradient(135deg, #c099bd 0%, #0b5cad 100%);
             --dark-bg: #061512;
-            --dark-card: #0a211b;
+            --dark-card: #0a1521;
             --border-subtle: rgba(16, 185, 129, 0.2);
             --text-primary: #F8FAFC;
             --text-secondary: #94A3B8;
@@ -122,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.16) 0%, transparent 40%),
                         radial-gradient(circle at 90% 80%, rgba(5, 150, 105, 0.14) 0%, transparent 40%),
-                        linear-gradient(135deg, #061512 0%, #0c2720 100%);
+                        linear-gradient(135deg, #c099bd  0%, #0b5cad 100%);
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
@@ -171,7 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             gap: 6px;
             background: rgba(16, 185, 129, 0.16);
             border: 1px solid rgba(16, 185, 129, 0.4);
-            color: #34d399;
+            color: #216f91;
             font-size: 0.75rem;
             font-weight: 700;
             padding: 4px 14px;
@@ -270,7 +270,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .forgot-password {
-            color: #34d399;
+            color: #a6b7ff;
             text-decoration: none;
             transition: color var(--transition-speed) ease;
         }
@@ -367,9 +367,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="logo-box">
                 <img src="../landing/landing_assets/images/liyas_logo_white.png" alt="Liya's Furniture & Electronics Logo">
             </div>
-            <div class="role-badge">
-                <i class="fas fa-user-tie"></i> Promoter Portal
-            </div>
+          
             <h1>Promoter Sign In</h1>
             <p>A Unit of Pro Gee Dee Ventures Pvt. Ltd.</p>
         </div>
@@ -416,7 +414,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <button type="submit" class="login-btn">
-                    <i class="fas fa-sign-in-alt"></i> Sign In to Portal
+                    <i class="fas fa-sign-in-alt"></i> Sign In 
                 </button>
             </form>
 
