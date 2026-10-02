@@ -50,22 +50,22 @@
     }
 
     .circle:nth-child(1) {
-        stroke: #10B981;
+        stroke: #c099bd;
         animation-delay: 0s;
     }
 
     .circle:nth-child(2) {
-        stroke: #059669;
+        stroke: #0b5cad;
         animation-delay: 0.3s;
     }
 
     .circle:nth-child(3) {
-        stroke: #10B981;
+        stroke: #c099bd;
         animation-delay: 0.6s;
     }
 
     .circle:nth-child(4) {
-        stroke: #059669;
+        stroke: #0b5cad;
         animation-delay: 0.9s;
     }
 

@@ -837,7 +837,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             justify-content: center;
             gap: 10px;
             padding: 15px 30px;
-            background: linear-gradient(135deg, var(--primary-color) 0%, #084c39 100%);
+            background: linear-gradient(135deg, #c099bd 0%, #0B5CAD 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -847,12 +847,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(13, 106, 80, 0.2);
+            box-shadow: 0 4px 15px rgba(11, 92, 173, 0.25);
         }
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(13, 106, 80, 0.3);
+            box-shadow: 0 6px 20px rgba(11, 92, 173, 0.35);
         }
 
         .btn-submit:active {
@@ -1052,7 +1052,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .btn-edit:hover {
-            background: #084c39;
+            background: #074786;
         }
 
         .document-preview {

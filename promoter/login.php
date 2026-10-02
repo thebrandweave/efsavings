@@ -102,10 +102,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             --brand-magenta: #1045b9;
             --brand-blue: #055296;
             --brand-gradient: linear-gradient(135deg, #c099bd 0%, #0b5cad 100%);
-            --brand-gradient-hover: linear-gradient(135deg, #c099bd 0%, #0b5cad 100%);
-            --dark-bg: #061512;
+            --brand-gradient-hover: linear-gradient(135deg, #b085ac 0%, #094a8c 100%);
+            --dark-bg: #07101c;
             --dark-card: #0a1521;
-            --border-subtle: rgba(16, 185, 129, 0.2);
+            --border-subtle: rgba(192, 153, 189, 0.25);
             --text-primary: #F8FAFC;
             --text-secondary: #94A3B8;
             --border-radius: 14px;
@@ -120,8 +120,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.16) 0%, transparent 40%),
-                        radial-gradient(circle at 90% 80%, rgba(5, 150, 105, 0.14) 0%, transparent 40%),
+            background: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.12) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(11, 92, 173, 0.22) 0%, transparent 40%),
                         linear-gradient(135deg, #c099bd  0%, #0b5cad 100%);
             color: var(--text-primary);
             min-height: 100vh;
@@ -136,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             max-width: 440px;
             background: var(--dark-card);
             border-radius: var(--border-radius);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(16, 185, 129, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(11, 92, 173, 0.2);
             border: 1px solid var(--border-subtle);
             overflow: hidden;
             position: relative;
@@ -163,15 +163,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             max-height: 52px;
             width: auto;
             object-fit: contain;
+            transition: all var(--transition-speed) ease;
         }
 
         .role-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(16, 185, 129, 0.16);
-            border: 1px solid rgba(16, 185, 129, 0.4);
-            color: #216f91;
+            background: linear-gradient(135deg, rgba(192, 153, 189, 0.2) 0%, rgba(11, 92, 173, 0.25) 100%);
+            border: 1px solid rgba(192, 153, 189, 0.4);
+            color: #d8c2d6;
             font-size: 0.75rem;
             font-weight: 700;
             padding: 4px 14px;
@@ -223,7 +224,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .form-control:focus {
             background: rgba(255, 255, 255, 0.08);
             border-color: var(--brand-magenta);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+            box-shadow: 0 0 0 3px rgba(11, 92, 173, 0.25);
             outline: none;
             color: #ffffff;
         }
@@ -276,7 +277,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .forgot-password:hover {
-            color: #6ee7b7;
+            color: #c099bd;
             text-decoration: underline;
         }
 
@@ -291,7 +292,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: 600;
             cursor: pointer;
             transition: all var(--transition-speed) ease;
-            box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
+            box-shadow: 0 4px 18px rgba(11, 92, 173, 0.35);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -301,7 +302,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .login-btn:hover {
             background: var(--brand-gradient-hover);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+            box-shadow: 0 8px 24px rgba(11, 92, 173, 0.5);
         }
 
         .login-btn:active {

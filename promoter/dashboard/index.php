@@ -208,8 +208,8 @@ $currentPage = 'dashboard';
     <style>
         :root {
             --primary-color: #0B5CAD;
-            --brand-magenta: #9B0090;
-            --brand-gradient: linear-gradient(135deg, #0B5CAD 0%, #9B0090 100%);
+            --brand-magenta: #c099bd;
+            --brand-gradient: linear-gradient(135deg, #c099bd 0%, #0b5cad 100%);
             --primary-light: rgba(11, 92, 173, 0.1);
             --secondary-color: #1E293B;
             --success-color: #10b981;
@@ -957,7 +957,7 @@ $currentPage = 'dashboard';
         }
 
         .inspiration-card {
-            background: linear-gradient(135deg, #0B5CAD 0%, #9B0090 100%);
+            background: linear-gradient(135deg, #c099bd 0%, #0b5cad 100%);
             border-radius: 20px;
             padding: 30px;
             color: white;
@@ -1232,7 +1232,7 @@ $currentPage = 'dashboard';
 
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, rgba(192, 153, 189, 0.2) 0%, rgba(11, 92, 173, 0.2) 100%); color: #0B5CAD;">
                             <i class="fas fa-file-contract"></i>
                         </div>
                     </div>

@@ -12,13 +12,14 @@
     :root {
         --sidebar-width: 250px;
         --sidebar-collapsed-width: 70px;
-        --primary-color: #10B981;
-        --secondary-color: #059669;
-        --primary-light: rgba(16, 185, 129, 0.12);
-        --brand-emerald: #10B981;
+        --primary-color: #0B5CAD;
+        --secondary-color: #c099bd;
+        --primary-light: rgba(11, 92, 173, 0.12);
+        --brand-blue: #0B5CAD;
+        --brand-mauve: #c099bd;
         --text-color: #F8FAFC;
-        --hover-color: #34d399;
-        --brand-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        --hover-color: #c099bd;
+        --brand-gradient: linear-gradient(135deg, #c099bd 0%, #0b5cad 100%);
         --transition-speed: 0.3s;
     }
 
@@ -28,8 +29,8 @@
         left: 0;
         height: 100vh;
         width: var(--sidebar-width);
-        background: linear-gradient(180deg, #061512 0%, #0b221c 50%, #061512 100%);
-        border-right: 1px solid rgba(16, 185, 129, 0.28);
+        background: linear-gradient(180deg, #09131f 0%, #0f1e33 50%, #09131f 100%);
+        border-right: 1px solid rgba(192, 153, 189, 0.22);
         box-shadow: 4px 0 25px rgba(0, 0, 0, 0.5);
         transition: all var(--transition-speed) ease;
         z-index: 1000;
@@ -63,7 +64,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-bottom: 1px solid rgba(16, 185, 129, 0.18);
+        border-bottom: 1px solid rgba(192, 153, 189, 0.15);
     }
 
     .sidebar-brand-wrapper {
@@ -89,10 +90,10 @@
     }
 
     .badge-promoter {
-        background: rgba(16, 185, 129, 0.16);
-        border: 1px solid rgba(16, 185, 129, 0.45);
-        color: #34d399;
-        box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+        background: linear-gradient(135deg, rgba(192, 153, 189, 0.2) 0%, rgba(11, 92, 173, 0.25) 100%);
+        border: 1px solid rgba(192, 153, 189, 0.45);
+        color: #e5d4e4;
+        box-shadow: 0 0 10px rgba(11, 92, 173, 0.25);
     }
 
     .collapsed .portal-badge {
@@ -167,9 +168,9 @@
     }
 
     .sidebar-menu li.active {
-        background: linear-gradient(90deg, rgba(16, 185, 129, 0.28) 0%, rgba(5, 150, 105, 0.18) 100%);
-        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
-        border: 1px solid rgba(16, 185, 129, 0.45);
+        background: linear-gradient(90deg, rgba(192, 153, 189, 0.28) 0%, rgba(11, 92, 173, 0.22) 100%);
+        box-shadow: 0 4px 14px rgba(11, 92, 173, 0.25);
+        border: 1px solid rgba(192, 153, 189, 0.4);
     }
 
     .sidebar-menu li.active::before {
@@ -179,8 +180,8 @@
         top: 0;
         height: 100%;
         width: 4px;
-        background: #10B981;
-        box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+        background: linear-gradient(180deg, #c099bd 0%, #0b5cad 100%);
+        box-shadow: 0 0 10px rgba(192, 153, 189, 0.8);
         border-radius: 0 4px 4px 0;
     }
 

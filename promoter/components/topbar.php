@@ -3,8 +3,8 @@
 <style>
     :root {
         --topbar-height: 70px;
-        --Topprimary-color: #10B981;
-        --Topsecondary-color: #059669;
+        --Topprimary-color: #0B5CAD;
+        --Topsecondary-color: #c099bd;
         --Toptext-dark: #1E293B;
         --Toptext-light: #64748B;
         --topborder-color: #e2e8f0;
@@ -29,8 +29,17 @@
         padding: 0 25px;
         transition: left var(--transition-speed) ease;
         border-bottom: 1px solid var(--topborder-color);
-        border-top: 3px solid #10B981;
         font-family: 'Poppins', sans-serif;
+    }
+
+    .topbar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(135deg, #c099bd 0%, #0b5cad 100%);
     }
 
     .content-wrapper {
@@ -113,7 +122,7 @@
     }
 
     .action-icon:hover {
-        background-color: rgba(16, 185, 129, 0.12);
+        background-color: rgba(11, 92, 173, 0.1);
         color: var(--Topprimary-color);
     }
 
@@ -121,7 +130,7 @@
         position: absolute;
         top: -5px;
         right: -5px;
-        background-color: var(--Topprimary-color);
+        background: linear-gradient(135deg, #c099bd 0%, #0b5cad 100%);
         color: #ffffff;
         font-size: 10px;
         width: 18px;
@@ -131,7 +140,7 @@
         justify-content: center;
         border-radius: 50%;
         font-weight: bold;
-        box-shadow: 0 1px 3px rgba(16, 185, 129, 0.35);
+        box-shadow: 0 1px 3px rgba(11, 92, 173, 0.35);
     }
 
     /* User profile styles */
@@ -345,9 +354,9 @@
     }
 
     .badge-promoter {
-        background: rgba(16, 185, 129, 0.12);
-        color: #059669;
-        border: 1px solid rgba(16, 185, 129, 0.3);
+        background: linear-gradient(135deg, rgba(192, 153, 189, 0.18) 0%, rgba(11, 92, 173, 0.18) 100%);
+        color: #0B5CAD;
+        border: 1px solid rgba(192, 153, 189, 0.4);
     }
 </style>
 
