@@ -1,0 +1,342 @@
+{
+  "data": [
+    {
+      "name": "gd_promoter_registration_success",
+      "parameter_format": "NAMED",
+      "components": [
+        {
+          "type": "HEADER",
+          "format": "TEXT",
+          "text": "Promoter Registration Update"
+        },
+        {
+          "type": "BODY",
+          "text": "Dear {{promoter_name}}, your promoter registration is completed in our system.\nPromoter ID is {{promoter_id}} for your account records.\nAssigned commission rate is Rs.{{commission_rate}} per referal.\nFor account access, please use the login button below.",
+          "example": {
+            "body_text_named_params": [
+              {
+                "param_name": "promoter_name",
+                "example": "Azlan"
+              },
+              {
+                "param_name": "promoter_id",
+                "example": "GDP001"
+              },
+              {
+                "param_name": "commission_rate",
+                "example": "200"
+              }
+            ]
+          }
+        },
+        {
+          "type": "FOOTER",
+          "text": "System Generated Notification"
+        }
+      ],
+      "language": "en",
+      "status": "APPROVED",
+      "category": "UTILITY",
+      "sub_category": "CUSTOM",
+      "is_primary_device_delivery_only": false,
+      "id": "1924431534842882"
+    },
+    {
+      "name": "gd_payment_rejected",
+      "parameter_format": "NAMED",
+      "components": [
+        {
+          "type": "HEADER",
+          "format": "TEXT",
+          "text": "Payment Status Alert"
+        },
+        {
+          "type": "BODY",
+          "text": "Dear {{customer_name}}, your payment of Rs {{payment_amount}} has been rejected by our team.\nRemarks: {{rejection_remarks}}.\nPlease retry the payment.",
+          "example": {
+            "body_text_named_params": [
+              {
+                "param_name": "customer_name",
+                "example": "Azlan"
+              },
+              {
+                "param_name": "payment_amount",
+                "example": "1000"
+              },
+              {
+                "param_name": "rejection_remarks",
+                "example": "insufficeint funds"
+              }
+            ]
+          }
+        },
+        {
+          "type": "FOOTER",
+          "text": "Liyas Gold Savings Support"
+        }
+      ],
+      "language": "en",
+      "status": "APPROVED",
+      "category": "UTILITY",
+      "sub_category": "CUSTOM",
+      "is_primary_device_delivery_only": false,
+      "id": "1594016768334687"
+    },
+    {
+      "name": "gd_payment_reminder",
+      "parameter_format": "NAMED",
+      "components": [
+        {
+          "type": "HEADER",
+          "format": "TEXT",
+          "text": "Payment Reminder"
+        },
+        {
+          "type": "BODY",
+          "text": "Dear {{customer_name}},\nThis is a reminder that your payment for {{scheme_name}} - {{installment_name}} is pending.\nAmount due is Rs {{due_amount}} for this installment.\nDue date is {{due_date}} for this payment.\nPlease submit your payment at the earliest.\nIf already paid, please ignore this message.",
+          "example": {
+            "body_text_named_params": [
+              {
+                "param_name": "customer_name",
+                "example": "Azlan"
+              },
+              {
+                "param_name": "scheme_name",
+                "example": "Liyas Gold Savings"
+              },
+              {
+                "param_name": "installment_name",
+                "example": "April 26"
+              },
+              {
+                "param_name": "due_amount",
+                "example": "1000"
+              },
+              {
+                "param_name": "due_date",
+                "example": "10-01-2026"
+              }
+            ]
+          }
+        },
+        {
+          "type": "FOOTER",
+          "text": "Thank you, Liyas Gold Savings Team"
+        }
+      ],
+      "language": "en",
+      "status": "APPROVED",
+      "category": "UTILITY",
+      "sub_category": "CUSTOM",
+      "is_primary_device_delivery_only": false,
+      "id": "922129667322007"
+    },
+    {
+      "name": "gd_withdrawal_status",
+      "parameter_format": "NAMED",
+      "components": [
+        {
+          "type": "HEADER",
+          "format": "TEXT",
+          "text": "Withdrawal Update"
+        },
+        {
+          "type": "BODY",
+          "text": "Dear {{user_name}}, your withdrawal request of Rs {{withdrawal_amount}} has been {{withdrawal_status}}.\nRemarks from admin are {{admin_remarks}} for this withdrawal request.",
+          "example": {
+            "body_text_named_params": [
+              {
+                "param_name": "user_name",
+                "example": "Azlan"
+              },
+              {
+                "param_name": "withdrawal_amount",
+                "example": "1000"
+              },
+              {
+                "param_name": "withdrawal_status",
+                "example": "Completed"
+              },
+              {
+                "param_name": "admin_remarks",
+                "example": "sucess"
+              }
+            ]
+          }
+        },
+        {
+          "type": "FOOTER",
+          "text": "Liyas Gold Savings Team"
+        }
+      ],
+      "language": "en",
+      "status": "APPROVED",
+      "category": "UTILITY",
+      "sub_category": "CUSTOM",
+      "is_primary_device_delivery_only": false,
+      "id": "973984885167521"
+    },
+    {
+      "name": "gd_wallet_update",
+      "parameter_format": "NAMED",
+      "components": [
+        {
+          "type": "HEADER",
+          "format": "TEXT",
+          "text": "Wallet Update"
+        },
+        {
+          "type": "BODY",
+          "text": "Account holder {{promoter_name}}, a wallet transaction has been processed.\nTransaction type is {{wallet_action}} and transaction amount is Rs {{transaction_amount}}.\nAvailable balance is Rs {{new_balance_amount}} as per current records.\nAdmin remarks are {{admin_remarks}} for reference.",
+          "example": {
+            "body_text_named_params": [
+              {
+                "param_name": "promoter_name",
+                "example": "Azlan"
+              },
+              {
+                "param_name": "wallet_action",
+                "example": "Credited"
+              },
+              {
+                "param_name": "transaction_amount",
+                "example": "1000"
+              },
+              {
+                "param_name": "new_balance_amount",
+                "example": "10000"
+              },
+              {
+                "param_name": "admin_remarks",
+                "example": "enjoy"
+              }
+            ]
+          }
+        },
+        {
+          "type": "FOOTER",
+          "text": "Liyas Gold Savings Team"
+        }
+      ],
+      "language": "en",
+      "status": "APPROVED",
+      "category": "UTILITY",
+      "sub_category": "CUSTOM",
+      "is_primary_device_delivery_only": false,
+      "id": "1313034510713469"
+    },
+    {
+      "name": "gd_payment_received",
+      "parameter_format": "NAMED",
+      "components": [
+        {
+          "type": "HEADER",
+          "format": "TEXT",
+          "text": "Payment Confirmation"
+        },
+        {
+          "type": "BODY",
+          "text": "Dear {{customer_name}}, thank you for choosing PROGEEDEE Ventures Private Limited Golden Dream Savings Plan.\nWe have received your payment of Rs {{payment_amount}} successfully.",
+          "example": {
+            "body_text_named_params": [
+              {
+                "param_name": "customer_name",
+                "example": "Azlan"
+              },
+              {
+                "param_name": "payment_amount",
+                "example": "1000"
+              }
+            ]
+          }
+        },
+        {
+          "type": "FOOTER",
+          "text": "Liyas Gold Savings Team"
+        }
+      ],
+      "language": "en",
+      "status": "APPROVED",
+      "category": "UTILITY",
+      "sub_category": "CUSTOM",
+      "is_primary_device_delivery_only": false,
+      "id": "2158902661534042"
+    },
+    {
+      "name": "gd_customer_register",
+      "parameter_format": "NAMED",
+      "components": [
+        {
+          "type": "HEADER",
+          "format": "TEXT",
+          "text": "Customer Registration Update"
+        },
+        {
+          "type": "BODY",
+          "text": "Dear {{customer_name}}, your registration for the Golden Dream Savings Plan is completed.\nYour Customer ID is {{customer_id}} in our records.",
+          "example": {
+            "body_text_named_params": [
+              {
+                "param_name": "customer_name",
+                "example": "Azlan"
+              },
+              {
+                "param_name": "customer_id",
+                "example": "GD0001"
+              }
+            ]
+          }
+        },
+        {
+          "type": "BUTTONS",
+          "buttons": [
+            {
+              "type": "URL",
+              "text": "Visit website",
+              "url": "https://goldendream.in/{{1}}",
+              "example": [
+                "https://lb.liyasgoldsavings.in/la"
+              ]
+            }
+          ]
+        }
+      ],
+      "language": "en",
+      "status": "APPROVED",
+      "category": "UTILITY",
+      "sub_category": "CUSTOM",
+      "is_primary_device_delivery_only": false,
+      "id": "1495768002224580"
+    },
+    {
+      "name": "hello_world",
+      "parameter_format": "POSITIONAL",
+      "components": [
+        {
+          "type": "HEADER",
+          "format": "TEXT",
+          "text": "Hello World"
+        },
+        {
+          "type": "BODY",
+          "text": "Welcome and congratulations!! This message demonstrates your ability to send a WhatsApp message notification from the Cloud API, hosted by Meta. Thank you for taking the time to test with us."
+        },
+        {
+          "type": "FOOTER",
+          "text": "WhatsApp Business Platform sample message"
+        }
+      ],
+      "language": "en_US",
+      "status": "APPROVED",
+      "category": "UTILITY",
+      "is_primary_device_delivery_only": false,
+      "id": "943035518720603"
+    }
+  ],
+  "paging": {
+    "cursors": {
+      "before": "QVFIU1loMU56TkU0akFYc2pOUUdBMHN3X2JmQ2Y5aWhzNW5hYVpkM1ZAMVURBWV9JajJFX1h4QmxpR0x2N2U5ZAHVCLVpRcUZA1YWlDZA3RnZAnpCaUVhSFp5R1BB",
+      "after": "QVFIUzZAiS2JQNTBfbTRjZAWY3UFRoVC1rT2NFNWNQb19OYVVhTnYweEoxTmdKS1lQY0trWkg0S3lsRzhyWFREVnJJbndKMnRxRXBad2dDX3B0MTQ4MjE2MWV3"
+    }
+  }
+}

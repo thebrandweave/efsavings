@@ -1,0 +1,292 @@
+<?php
+/**
+ * Hardcoded Airtel SMS sender (same as test/sms.php).
+ * No DB; templates and credentials fixed.
+ */
+
+// Credentials (from test/sms.php)
+define('SMS_API_URL', 'https://iqsms.airtel.in/api/v1/send-prepaid-sms');
+define('SMS_CUSTOMER_ID', '72c5ff0d-4624-4972-bc1c-dcef261dd7f7');
+define('SMS_USERNAME', 'f8758d62_260c_404b_8d4a_a15ce94593d4');
+define('SMS_PASSWORD', 'jx0NgVQjBT');
+define('SMS_ENTITY_ID', '1001791223662244844');
+
+// Template ID 1007289085098641045 - Welcome
+// "Dear var, welcome to PROGEEDEE Ventures Private Limited. You have successfully registered for the Golden Dream Savings Plan. Your Customer ID is var. Visit https://goldendream.in/ for more details."
+define('SMS_TEMPLATE_WELCOME_ID', '1007289085098641045');
+define('SMS_SOURCE_WELCOME', 'PGDVTR');
+
+// Template ID 1007000046423973167 - Payment received
+// "Dear var Thank you for choosing PROGEEDEE Ventures Private Limited Golden Dream Savings Plan We have received your payment of Rs var"
+define('SMS_TEMPLATE_PAYMENT_ID', '1007000046423973167');
+define('SMS_SOURCE_PAYMENT', 'PRGDVN');
+
+/** Log file path (relative to this config folder) */
+define('SMS_LOG_FILE', __DIR__ . '/sms_log.txt');
+
+/**
+ * Append one SMS attempt to sms_log.txt.
+ * @param string $type welcome|payment_verified|payment_rejected
+ * @param string $phone Full phone e.g. 918088122761
+ * @param bool $success Whether send succeeded
+ * @param string $detail Optional: HTTP code, error message or response (truncated)
+ */
+function smsHelperLog($type, $phone, $success, $detail = '') {
+    $masked = (strlen($phone) > 6) ? substr($phone, 0, 2) . str_repeat('*', strlen($phone) - 6) . substr($phone, -4) : '***';
+    $line = date('Y-m-d H:i:s') . ' | TYPE=' . $type . ' | PHONE=' . $masked . ' | SUCCESS=' . ($success ? '1' : '0');
+    if ($detail !== '') {
+        $detail = str_replace(["\r", "\n"], ' ', $detail);
+        if (strlen($detail) > 300) {
+            $detail = substr($detail, 0, 300) . '...';
+        }
+        $line .= ' | ' . $detail;
+    }
+    $line .= "\n";
+
+    $logFile = SMS_LOG_FILE;
+    $written = @file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX);
+    if ($written === false) {
+        $fallbackDir = __DIR__ . '/../logs';
+        if (!is_dir($fallbackDir)) {
+            @mkdir($fallbackDir, 0755, true);
+        }
+        if (is_dir($fallbackDir)) {
+            $logFile = $fallbackDir . '/sms_log.txt';
+            $written = @file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX);
+        }
+        if ($written === false && function_exists('error_log')) {
+            error_log('SMSHelper: could not write sms_log to ' . SMS_LOG_FILE . ' or ' . (isset($fallbackDir) ? $fallbackDir . '/sms_log.txt' : 'fallback'));
+        }
+    }
+}
+
+/**
+ * Sanitize customer name for Airtel SMS and WhatsApp DLT compliance:
+ * - Trims whitespace
+ * - Replaces multiple/double spaces with a single space
+ * - Keeps only first and second name
+ * - Trims trailing single-character initials
+ */
+function sanitizeCustomerName($fullName) {
+    if (empty($fullName)) {
+        return '';
+    }
+
+    // 1. Replace special non-breaking spaces or multi-whitespace with standard single space
+    $name = preg_replace('/\s+/', ' ', trim((string)$fullName));
+
+    // 2. Remove special characters except letters, numbers, and spaces
+    $name = preg_replace('/[^a-zA-Z0-9\s]/', '', $name);
+
+    // 3. Split into words
+    $words = array_values(array_filter(explode(' ', $name)));
+
+    if (empty($words)) {
+        return '';
+    }
+
+    // Filter out trailing single-letter initials if more than 1 word exists
+    // e.g. ["bilal", "ahmed", "s"] -> remove "s"
+    if (count($words) > 1) {
+        $lastIndex = count($words) - 1;
+        if (strlen($words[$lastIndex]) === 1) {
+            array_pop($words);
+        }
+    }
+
+    // Keep only the first 2 words (first and second name)
+    $words = array_slice($words, 0, 2);
+
+    return implode(' ', $words);
+}
+
+/**
+ * Check if current time is within TRAI restricted SMS time band (9:00 PM - 10:00 AM IST)
+ * @return bool True if inside restricted time band (9 PM - 10 AM)
+ */
+function isSMSTimeBandRestricted() {
+    date_default_timezone_set('Asia/Kolkata');
+    $currentHour = (int)date('H'); // 0 to 23
+    return ($currentHour >= 21 || $currentHour < 10);
+}
+
+/**
+ * Send one SMS via Airtel API (same cURL as test/sms.php).
+ * @param array $data Payload: customerId, destinationAddress, message, sourceAddress, messageType, dltTemplateId, entityId
+ * @return array ['ok' => bool, 'httpCode' => int, 'response' => string]
+ */
+function smsHelperSend($data) {
+    static $recentSends = [];
+
+    $phoneKey = isset($data['destinationAddress'][0]) ? (string)$data['destinationAddress'][0] : '';
+    $msgKey = isset($data['message']) ? md5((string)$data['message']) : '';
+    $dedupKey = $phoneKey . '_' . $msgKey;
+
+    // TRAI 9 PM - 10 AM Time Band Check for SERVICE_EXPLICIT SMS
+    $msgType = strtoupper($data['messageType'] ?? 'SERVICE_EXPLICIT');
+    if ($msgType === 'SERVICE_EXPLICIT' && isSMSTimeBandRestricted()) {
+        error_log("SMSHelper: Suppressed SERVICE_EXPLICIT SMS for {$phoneKey} during 9 PM - 10 AM TRAI restricted window. Routing via WhatsApp fallback.");
+        return [
+            'ok' => false,
+            'httpCode' => 651,
+            'response' => '{"status":"RESTRICTED_TIME_BAND","message":"TRAI 9 PM - 10 AM Time Band Restriction"}'
+        ];
+    }
+
+    $currentTime = time();
+    if (!empty($phoneKey) && !empty($msgKey) && isset($recentSends[$dedupKey])) {
+        if (($currentTime - $recentSends[$dedupKey]) < 60) {
+            error_log("SMSHelper: Duplicate SMS suppressed for {$phoneKey} within 60s window.");
+            return [
+                'ok' => true,
+                'httpCode' => 200,
+                'response' => '{"status":"SUPPRESSED_DUPLICATE"}'
+            ];
+        }
+    }
+
+    $recentSends[$dedupKey] = $currentTime;
+
+    $ch = curl_init(SMS_API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'accept: application/json',
+        'content-type: application/json',
+        'Authorization: Basic ' . base64_encode(SMS_USERNAME . ':' . SMS_PASSWORD)
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    return [
+        'ok' => ($httpCode >= 200 && $httpCode < 300),
+        'httpCode' => $httpCode,
+        'response' => $response === false ? '' : $response
+    ];
+}
+
+/**
+ * Format phone: 10 digits -> 91XXXXXXXXXX
+ */
+function smsHelperPhone($phone) {
+    $phone = preg_replace('/\D/', '', $phone);
+    if (strlen($phone) === 10) {
+        return '91' . $phone;
+    }
+    if (substr($phone, 0, 2) !== '91') {
+        return '91' . $phone;
+    }
+    return $phone;
+}
+
+/**
+ * Welcome SMS (onboarding) - Template 1007289085098641045, PGDVTR
+ * var1 = customer name, var2 = customer unique ID
+ */
+function sendWelcomeSMSHardcoded($phoneNumber, $customerName, $customerUniqueID) {
+    $phone = smsHelperPhone($phoneNumber);
+    if (strlen($phone) < 12) {
+        smsHelperLog('welcome', $phone ?: $phoneNumber, false, 'invalid phone');
+        error_log("SMSHelper welcome: invalid phone");
+        return false;
+    }
+    $customerName = sanitizeCustomerName($customerName);
+    // Exact template text; replace first var with name, second with customer ID
+    $message = "Dear " . $customerName . ", welcome to PROGEEDEE Ventures Private Limited. You have successfully registered for the Golden Dream Savings Plan. Your Customer ID is " . $customerUniqueID . ". Visit https://goldendream.in/ for more details.";
+    $message = preg_replace('/\s+/', ' ', $message);
+
+    $data = [
+        'customerId' => SMS_CUSTOMER_ID,
+        'destinationAddress' => [$phone],
+        'message' => $message,
+        'sourceAddress' => SMS_SOURCE_WELCOME,
+        'messageType' => 'SERVICE_EXPLICIT',
+        'dltTemplateId' => SMS_TEMPLATE_WELCOME_ID,
+        'entityId' => SMS_ENTITY_ID
+    ];
+
+    $result = smsHelperSend($data);
+    $detail = $result['ok'] ? 'HTTP ' . $result['httpCode'] : 'HTTP ' . $result['httpCode'] . ' ' . $result['response'];
+    smsHelperLog('welcome', $phone, $result['ok'], $detail);
+    if (!$result['ok']) {
+        error_log("SMSHelper welcome failed: HTTP " . $result['httpCode'] . " " . $result['response']);
+    }
+    return $result['ok'];
+}
+
+/**
+ * Payment verified SMS - Template 1007000046423973167, PRGDVN
+ * var1 = customer name, var2 = amount (no decimals)
+ * Template: "Dear var Thank you for choosing PROGEEDEE Ventures Private Limited Golden Dream Savings Plan We have received your payment of Rs var"
+ */
+function sendPaymentVerifiedSMSHardcoded($phoneNumber, $customerName, $amount) {
+    $phone = smsHelperPhone($phoneNumber);
+    if (strlen($phone) < 12) {
+        smsHelperLog('payment_verified', $phone ?: $phoneNumber, false, 'invalid phone');
+        error_log("SMSHelper payment verified: invalid phone");
+        return false;
+    }
+    $customerName = sanitizeCustomerName($customerName);
+    $amountStr = number_format((float) $amount, 0, '', '');
+    $message = "Dear " . $customerName . " Thank you for choosing PROGEEDEE Ventures Private Limited Golden Dream Savings Plan We have received your payment of Rs " . $amountStr;
+    $message = preg_replace('/\s+/', ' ', $message);
+
+    $data = [
+        'customerId' => SMS_CUSTOMER_ID,
+        'destinationAddress' => [$phone],
+        'message' => $message,
+        'sourceAddress' => SMS_SOURCE_PAYMENT,
+        'messageType' => 'SERVICE_EXPLICIT',
+        'dltTemplateId' => SMS_TEMPLATE_PAYMENT_ID,
+        'entityId' => SMS_ENTITY_ID
+    ];
+
+    $result = smsHelperSend($data);
+    $detail = $result['ok'] ? 'HTTP ' . $result['httpCode'] : 'HTTP ' . $result['httpCode'] . ' ' . $result['response'];
+    smsHelperLog('payment_verified', $phone, $result['ok'], $detail);
+    if (!$result['ok']) {
+        error_log("SMSHelper payment verified failed: HTTP " . $result['httpCode'] . " " . $result['response']);
+    }
+    return $result['ok'];
+}
+
+/**
+ * Payment rejected - no DLT template; send plain (may get PE-TM hash error on some gateways).
+ * If your gateway requires a template, add a reject template and call a new function here.
+ */
+function sendPaymentRejectedSMSHardcoded($phoneNumber, $customerName, $amount, $remarks = '') {
+    $phone = smsHelperPhone($phoneNumber);
+    if (strlen($phone) < 12) {
+        smsHelperLog('payment_rejected', $phone ?: $phoneNumber, false, 'invalid phone');
+        error_log("SMSHelper payment rejected: invalid phone");
+        return false;
+    }
+    $amountStr = number_format((float) $amount, 0, '', '');
+    $message = "Dear " . $customerName . ", your payment of Rs " . $amountStr . " has been rejected.";
+    if ($remarks !== '') {
+        $message .= " Remarks: " . $remarks;
+    }
+    // Use payment template structure; message won't match template so gateway may return 400 (PE-TM hash).
+    $data = [
+        'customerId' => SMS_CUSTOMER_ID,
+        'destinationAddress' => [$phone],
+        'message' => $message,
+        'sourceAddress' => SMS_SOURCE_PAYMENT,
+        'messageType' => 'SERVICE_EXPLICIT',
+        'dltTemplateId' => SMS_TEMPLATE_PAYMENT_ID,
+        'entityId' => SMS_ENTITY_ID
+    ];
+
+    $result = smsHelperSend($data);
+    $detail = $result['ok'] ? 'HTTP ' . $result['httpCode'] : 'HTTP ' . $result['httpCode'] . ' ' . $result['response'];
+    smsHelperLog('payment_rejected', $phone, $result['ok'], $detail);
+    if (!$result['ok']) {
+        error_log("SMSHelper payment rejected failed: HTTP " . $result['httpCode'] . " " . $result['response']);
+    }
+    return $result['ok'];
+}

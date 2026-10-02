@@ -1,0 +1,1331 @@
+<?php
+session_start();
+
+
+$menuPath = "../";
+$currentPage = "payments";
+
+require_once("../../config/config.php");
+$database = new Database();
+$conn = $database->getConnection();
+
+if (!function_exists('getPaymentScreenshotUrl')) {
+    function getPaymentScreenshotUrl($screenshotUrl) {
+        if (empty($screenshotUrl)) {
+            return null;
+        }
+        $clean = ltrim($screenshotUrl, '/\\');
+        
+        $candidates = [
+            '../../customer/' . $clean,
+            '../../customer/payments/' . $clean,
+            '../../' . $clean,
+            '../../customer/uploads/payments/' . basename($clean),
+            '../../customer/payments/uploads/payments/' . basename($clean),
+            '../../uploads/payments/' . basename($clean),
+        ];
+        
+        foreach ($candidates as $relPath) {
+            $realPath = __DIR__ . '/' . $relPath;
+            if (file_exists($realPath) && is_file($realPath)) {
+                return $relPath;
+            }
+        }
+        
+        return '../../customer/' . $clean;
+    }
+}
+
+// Check if payment ID is provided
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    $_SESSION['error_message'] = "Payment ID is required to view details.";
+    header("Location: index.php");
+    exit();
+}
+
+$paymentId = $_GET['id'];
+
+// Fetch payment details with related data
+try {
+    $query = "
+        SELECT p.*,
+            c.Name as CustomerName, c.CustomerUniqueID, c.Contact as CustomerContact, c.Email as CustomerEmail, c.ProfileImageURL as CustomerImage,
+            s.SchemeName, s.MonthlyPayment, s.TotalPayments,
+            pr.Name as PromoterName, pr.PromoterUniqueID, pr.Contact as PromoterContact,
+            a.Name as VerifierName
+        FROM Payments p
+        LEFT JOIN Customers c ON p.CustomerID = c.CustomerID
+        LEFT JOIN Schemes s ON p.SchemeID = s.SchemeID
+        LEFT JOIN Promoters pr ON p.PromoterID = pr.PromoterID
+        LEFT JOIN Admins a ON p.AdminID = a.AdminID
+        WHERE p.PaymentID = ?
+    ";
+
+    $stmt = $conn->prepare($query);
+    $stmt->execute([$paymentId]);
+    $payment = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$payment) {
+        $_SESSION['error_message'] = "Payment not found.";
+        header("Location: index.php");
+        exit();
+    }
+
+    // Fetch customer's other payments for this scheme
+    $otherPaymentsQuery = "
+        SELECT PaymentID, Amount, Status, SubmittedAt, VerifiedAt
+        FROM Payments
+        WHERE CustomerID = ? AND SchemeID = ? AND PaymentID != ?
+        ORDER BY SubmittedAt DESC
+        LIMIT 5
+    ";
+    $stmt = $conn->prepare($otherPaymentsQuery);
+    $stmt->execute([$payment['CustomerID'], $payment['SchemeID'], $paymentId]);
+    $otherPayments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch customer's active subscriptions
+    $subscriptionsQuery = "
+        SELECT s.SubscriptionID, s.StartDate, s.EndDate, s.RenewalStatus,
+               sch.SchemeName
+        FROM Subscriptions s
+        JOIN Schemes sch ON s.SchemeID = sch.SchemeID
+        WHERE s.CustomerID = ? AND s.RenewalStatus = 'Active'
+        ORDER BY s.StartDate DESC
+    ";
+    $stmt = $conn->prepare($subscriptionsQuery);
+    $stmt->execute([$payment['CustomerID']]);
+    $subscriptions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // If Pending and has UTR: fetch already Verified payments with same UTR (for duplicate UTR warning)
+    $duplicateUtrPayments = [];
+    if ($payment['Status'] === 'Pending' && !empty(trim($payment['UTRNumber'] ?? ''))) {
+        $utrStmt = $conn->prepare("
+            SELECT p.PaymentID, p.Amount, p.UTRNumber, p.VerifiedAt, p.Status,
+                   c.Name as CustomerName, c.CustomerUniqueID,
+                   s.SchemeName,
+                   i.InstallmentName, i.InstallmentNumber
+            FROM Payments p
+            LEFT JOIN Customers c ON p.CustomerID = c.CustomerID
+            LEFT JOIN Schemes s ON p.SchemeID = s.SchemeID
+            LEFT JOIN Installments i ON p.InstallmentID = i.InstallmentID
+            WHERE TRIM(p.UTRNumber) = ? AND p.Status = 'Verified' AND p.PaymentID != ?
+            ORDER BY p.VerifiedAt DESC
+        ");
+        $utrStmt->execute([trim($payment['UTRNumber']), $paymentId]);
+        $duplicateUtrPayments = $utrStmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Check if this is the customer's first verified payment for this scheme
+    $isFirstPayment = true;
+    $viewCommissionItems = [];
+    if (!empty($payment['CustomerID']) && !empty($payment['SchemeID'])) {
+        $vCountStmt = $conn->prepare("
+            SELECT COUNT(*) as v_count 
+            FROM Payments 
+            WHERE CustomerID = ? 
+              AND SchemeID = ? 
+              AND Status = 'Verified'
+              AND PaymentID != ?
+        ");
+        $vCountStmt->execute([$payment['CustomerID'], $payment['SchemeID'], $paymentId]);
+        $existingVerifiedCount = intval($vCountStmt->fetch(PDO::FETCH_ASSOC)['v_count'] ?? 0);
+        if ($existingVerifiedCount > 0) {
+            $isFirstPayment = false;
+        }
+    }
+
+    if ($isFirstPayment && !empty($payment['PromoterID'])) {
+        $pStmt = $conn->prepare("SELECT PromoterID, PromoterUniqueID, ParentPromoterID, Commission, ParentCommission, Name FROM Promoters");
+        $pStmt->execute();
+        $allPromoters = $pStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $promoterByRef = [];
+        foreach ($allPromoters as $p) {
+            $pID = (string)$p['PromoterID'];
+            $uID = trim($p['PromoterUniqueID']);
+            if (!empty($uID)) $promoterByRef[$uID] = $p;
+            if (!empty($pID)) $promoterByRef[$pID] = $p;
+        }
+
+        $currRef = trim($payment['PromoterID']);
+        $hierarchy = [];
+        $visited = [];
+        while (!empty($currRef) && !isset($visited[$currRef])) {
+            $visited[$currRef] = true;
+            if (!isset($promoterByRef[$currRef])) break;
+            $pData = $promoterByRef[$currRef];
+            $hierarchy[] = $pData;
+            $currRef = !empty($pData['ParentPromoterID']) ? trim($pData['ParentPromoterID']) : null;
+        }
+
+        if (!empty($hierarchy)) {
+            $convInt = function($val) {
+                return intval(preg_replace('/[^0-9]/', '', (string)$val));
+            };
+
+            $directPromoter = $hierarchy[0];
+            $viewCommissionItems[] = [
+                'role' => 'Direct Promoter',
+                'name' => $directPromoter['Name'],
+                'id' => trim($directPromoter['PromoterUniqueID']),
+                'amount' => $convInt($directPromoter['Commission'])
+            ];
+
+            for ($i = 0; $i < count($hierarchy) - 1; $i++) {
+                $child = $hierarchy[$i];
+                $parent = $hierarchy[$i + 1];
+                $childComm = $convInt($child['Commission']);
+                $parentComm = $convInt($parent['Commission']);
+                $gap = 0;
+                if (!empty($child['ParentCommission']) && $convInt($child['ParentCommission']) > 0) {
+                    $gap = $convInt($child['ParentCommission']);
+                } else if ($parentComm > $childComm) {
+                    $gap = $parentComm - $childComm;
+                }
+                $roleLabel = ($i === 0) ? 'Parent Promoter' : 'Grandparent Promoter';
+                $viewCommissionItems[] = [
+                    'role' => $roleLabel,
+                    'name' => $parent['Name'],
+                    'id' => trim($parent['PromoterUniqueID']),
+                    'amount' => $gap
+                ];
+            }
+        }
+    }
+} catch (PDOException $e) {
+    $_SESSION['error_message'] = "Error fetching payment details: " . $e->getMessage();
+    header("Location: index.php");
+    exit();
+}
+
+// Handle payment verification from view page
+if (isset($_POST['action']) && isset($_POST['payment_id'])) {
+    $action = $_POST['action'];
+    $remarks = trim($_POST['remarks'] ?? '');
+
+    try {
+        $conn->beginTransaction();
+
+        $newStatus = ($action === 'verify') ? 'Verified' : 'Rejected';
+
+        // Prevent duplicate processing if payment is already Verified or Rejected
+        if (isset($payment['Status']) && in_array($payment['Status'], ['Verified', 'Rejected'])) {
+            $conn->rollBack();
+            $_SESSION['error_message'] = "Payment #$paymentId has already been " . strtolower($payment['Status']) . ".";
+            header("Location: view.php?id=$paymentId");
+            exit();
+        }
+
+        // Update payment status atomically
+        $stmt = $conn->prepare("
+            UPDATE Payments 
+            SET Status = ?, AdminID = ?, VerifiedAt = CURRENT_TIMESTAMP 
+            WHERE PaymentID = ? AND Status NOT IN ('Verified', 'Rejected')
+        ");
+        $stmt->execute([$newStatus, $_SESSION['admin_id'], $paymentId]);
+
+        if ($stmt->rowCount() === 0) {
+            $conn->rollBack();
+            $_SESSION['error_message'] = "Payment #$paymentId was already updated by another action.";
+            header("Location: view.php?id=$paymentId");
+            exit();
+        }
+
+        // Create notification for customer
+        $notificationMessage = "Your payment of ₹" . number_format($payment['Amount'], 2) .
+            " for " . $payment['SchemeName'] . " has been " . strtolower($newStatus);
+        if (!empty($remarks)) {
+            $notificationMessage .= ". Remarks: " . $remarks;
+        }
+
+        $stmt = $conn->prepare("
+            INSERT INTO Notifications (UserID, UserType, Message) 
+            VALUES (?, 'Customer', ?)
+        ");
+        $stmt->execute([$payment['CustomerID'], $notificationMessage]);
+
+        // Log the activity
+        $stmt = $conn->prepare("
+            INSERT INTO ActivityLogs (UserID, UserType, Action, IPAddress) 
+            VALUES (?, 'Admin', ?, ?)
+        ");
+        $stmt->execute([
+            $_SESSION['admin_id'],
+            "$newStatus payment #$paymentId for customer " . $payment['CustomerName'],
+            $_SERVER['REMOTE_ADDR']
+        ]);
+
+        $conn->commit();
+
+        if ($newStatus === 'Verified') {
+            require_once("../../config/commission_helper.php");
+            $commResult = processPromoterCommission($payment['CustomerUniqueID'], $conn, $paymentId);
+
+            $_SESSION['verification_popup'] = [
+                'customer_name' => $payment['CustomerName'],
+                'customer_id' => $payment['CustomerUniqueID'],
+                'payment_id' => $paymentId,
+                'credited' => $commResult['credited'] ?? []
+            ];
+        }
+
+        $_SESSION['success_message'] = "Payment has been $newStatus successfully.";
+
+        // Redirect to refresh page with updated data
+        header("Location: view.php?id=$paymentId");
+        exit();
+    } catch (PDOException $e) {
+        $conn->rollBack();
+        $_SESSION['error_message'] = "Failed to process payment: " . $e->getMessage();
+    }
+}
+
+include("../components/sidebar.php");
+include("../components/topbar.php");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <style>
+        .payment-details-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .payment-info-card,
+        .customer-info-card,
+        .payment-history-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .payment-screenshot-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .payment-screenshot {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .payment-screenshot:hover {
+            transform: scale(1.02);
+        }
+
+        .payment-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .detail-item {
+            margin-bottom: 15px;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: #f39c12;
+        }
+
+        .status-verified {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+        }
+
+        .status-rejected {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .customer-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .customer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #0B5CAD;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 600;
+            margin-right: 15px;
+            overflow: hidden;
+        }
+
+        .customer-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .customer-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .customer-id {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        .contact-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(11, 92, 173, 0.1);
+            color: #0B5CAD;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 13px;
+            margin-top: 5px;
+            gap: 5px;
+        }
+
+        .payment-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .payment-history-table th,
+        .payment-history-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .payment-history-table th {
+            font-size: 14px;
+            font-weight: 600;
+            color: #7f8c8d;
+        }
+
+        .payment-history-table td {
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        .subscription-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subscription-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .subscription-dates {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border-radius: 6px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            text-decoration: none;
+        }
+
+        .verify-btn {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3);
+        }
+
+        .verify-btn:hover {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.4);
+        }
+
+        .reject-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
+        }
+
+        .reject-btn:hover {
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4);
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            box-shadow: 0 2px 5px rgba(127, 140, 141, 0.3);
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(127, 140, 141, 0.4);
+        }
+
+        .action-btns {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .verifier-info {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ecf0f1;
+        }
+
+        .verifier-info i {
+            margin-right: 5px;
+            color: #0B5CAD;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(231, 76, 60, 0.8);
+            transform: rotate(90deg);
+        }
+
+        .action-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .action-modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .action-modal-body {
+            margin-bottom: 20px;
+        }
+
+        .remarks-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            resize: vertical;
+            min-height: 80px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .remarks-input:focus {
+            outline: none;
+            border-color: #0B5CAD;
+            box-shadow: 0 0 0 2px rgba(11, 92, 173, 0.2);
+        }
+
+        .action-modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .modal-cancel-btn {
+            background: #f1f2f6;
+            color: #576574;
+        }
+
+        .modal-cancel-btn:hover {
+            background: #dfe4ea;
+        }
+
+        .modal-confirm-btn {
+            background: #0B5CAD;
+            color: white;
+        }
+
+        .modal-confirm-btn:hover {
+            background: #08437f;
+        }
+
+        @media (max-width: 768px) {
+            .payment-details-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h1 class="page-title">Payment Details</h1>
+        </div>
+
+        <?php if (isset($_SESSION['success_message'])): ?>
+            <div class="alert alert-success">
+                <?php
+                echo $_SESSION['success_message'];
+                unset($_SESSION['success_message']);
+                ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['verification_popup'])): 
+            $popupData = $_SESSION['verification_popup'];
+            unset($_SESSION['verification_popup']);
+        ?>
+            <div class="modal fade show" id="commissionSuccessModal" tabindex="-1" style="display: block; background: rgba(0,0,0,0.55); z-index: 9999;" aria-modal="true" role="dialog">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="border-radius: 14px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); overflow: hidden;">
+                  <div class="modal-header" style="background: #198754; color: white; border-bottom: none; padding: 18px 24px;">
+                    <h5 class="modal-title font-weight-bold" style="margin: 0; font-size: 18px;">
+                      <i class="fas fa-check-circle me-2"></i> Payment Verified Successfully
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" style="cursor: pointer;" onclick="document.getElementById('commissionSuccessModal').remove()"></button>
+                  </div>
+                  <div class="modal-body" style="padding: 24px; font-size: 15px; color: #333;">
+                    <p style="margin-bottom: 16px;">
+                      Payment #<strong><?php echo htmlspecialchars($popupData['payment_id']); ?></strong> for customer <strong><?php echo htmlspecialchars($popupData['customer_name']); ?></strong> (<code><?php echo htmlspecialchars($popupData['customer_id']); ?></code>) has been verified.
+                    </p>
+                    
+                    <?php if (!empty($popupData['credited'])): ?>
+                    <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 10px; padding: 16px;">
+                      <h6 style="color: #198754; font-weight: 700; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <i class="fas fa-coins me-1"></i> Commission Allocation
+                      </h6>
+                      <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <?php foreach ($popupData['credited'] as $item): ?>
+                          <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #198754; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            <div>
+                              <div style="font-weight: 600; color: #212529; font-size: 14px;"><?php echo htmlspecialchars($item['role']); ?>: <?php echo htmlspecialchars($item['name']); ?></div>
+                              <div style="font-size: 12px; color: #6c757d;">ID: <?php echo htmlspecialchars($item['id']); ?></div>
+                            </div>
+                            <span style="background: #d1e7dd; color: #0f5132; font-weight: 700; padding: 4px 10px; border-radius: 20px; font-size: 14px;">
+                              + ₹<?php echo number_format($item['amount'], 2); ?>
+                            </span>
+                          </div>
+                        <?php endforeach; ?>
+                      </div>
+                    </div>
+                    <?php endif; ?>
+                  </div>
+                  <div class="modal-footer" style="background: #f8f9fa; border-top: 1px solid #eee; padding: 12px 24px;">
+                    <button type="button" class="btn btn-success px-4" style="border-radius: 8px; font-weight: 600;" onclick="document.getElementById('commissionSuccessModal').remove()">OK / Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['error_message'])): ?>
+            <div class="alert alert-danger">
+                <?php
+                echo $_SESSION['error_message'];
+                unset($_SESSION['error_message']);
+                ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="action-btns">
+            <a href="index.php" class="action-btn back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Payments
+            </a>
+
+            <?php if ($payment['Status'] === 'Pending' && !empty($duplicateUtrPayments)): ?>
+                <div class="duplicate-utr-warning" style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+                    <strong><i class="fas fa-exclamation-triangle"></i> Same UTR already used in verified payment(s):</strong>
+                    <table class="payment-history-table" style="margin-top:10px;width:100%;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Customer</th>
+                                <th>Scheme</th>
+                                <th>Installment</th>
+                                <th>Amount</th>
+                                <th>Verified At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($duplicateUtrPayments as $dup): ?>
+                                <?php
+                                $instLabel = '-';
+                                if (!empty($dup['InstallmentName']) || isset($dup['InstallmentNumber'])) {
+                                    $n = $dup['InstallmentName'] ?? '';
+                                    $num = $dup['InstallmentNumber'] ?? '';
+                                    $instLabel = $n ? ($num !== '' ? $n . ' (' . $num . ')' : $n) : ($num !== '' ? (string)$num : '-');
+                                }
+                                ?>
+                                <tr>
+                                    <td>#<?php echo $dup['PaymentID']; ?></td>
+                                    <td><?php echo htmlspecialchars($dup['CustomerName'] . ' (' . $dup['CustomerUniqueID'] . ')'); ?></td>
+                                    <td><?php echo htmlspecialchars($dup['SchemeName'] ?? '-'); ?></td>
+                                    <td><?php echo htmlspecialchars($instLabel); ?></td>
+                                    <td>₹<?php echo number_format($dup['Amount'], 2); ?></td>
+                                    <td><?php echo $dup['VerifiedAt'] ? date('M d, Y H:i', strtotime($dup['VerifiedAt'])) : '-'; ?></td>
+                                    <td><a href="view.php?id=<?php echo $dup['PaymentID']; ?>" class="action-btn view-btn" style="padding:4px 8px;font-size:12px;"><i class="fas fa-eye"></i> View</a></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <p style="margin:10px 0 0;font-size:13px;color:#856404;">You can still approve or reject this payment.</p>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($payment['Status'] === 'Pending'): ?>
+                <button class="action-btn verify-btn" onclick="showActionModal('verify')">
+                    <i class="fas fa-check"></i> Verify Payment
+                </button>
+                <button class="action-btn reject-btn" onclick="showActionModal('reject')">
+                    <i class="fas fa-times"></i> Reject Payment
+                </button>
+            <?php endif; ?>
+        </div>
+
+        <div class="payment-details-container">
+            <div class="left-column">
+                <div class="payment-info-card">
+                    <h2 class="section-title">Payment Information</h2>
+
+                    <div class="payment-screenshot-container">
+                        <?php 
+                        $screenshotUrl = getPaymentScreenshotUrl($payment['ScreenshotURL'] ?? ''); 
+                        ?>
+                        <?php if ($screenshotUrl): ?>
+                            <img src="<?php echo htmlspecialchars($screenshotUrl); ?>"
+                                alt="Payment Screenshot"
+                                class="payment-screenshot"
+                                onclick="showImageModal(this.src)"
+                                onerror="this.onerror=null; if(this.src.indexOf('/customer/payments/') !== -1) { this.src=this.src.replace('/customer/payments/', '/customer/'); } else if(this.src.indexOf('/customer/') !== -1) { this.src=this.src.replace('/customer/', '/customer/payments/'); }">
+                        <?php else: ?>
+                            <div class="no-screenshot">
+                                <i class="fas fa-image"></i>
+                                <p>No screenshot available</p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php if ($payment['Status'] === 'Verified'): ?>
+                        <div style="margin-top: 14px; margin-bottom: 8px; text-align: center;">
+                            <a href="receipt.php?id=<?php echo $payment['PaymentID']; ?>" target="_blank" class="btn" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: linear-gradient(135deg, #9B0090, #0B5CAD); color: white; padding: 12px 18px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 12px rgba(155, 0, 144, 0.25);">
+                                <i class="fas fa-file-invoice"></i> View & Print Official Payment Receipt
+                            </a>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="payment-details-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Payment ID</div>
+                            <div class="detail-value">#<?php echo $payment['PaymentID']; ?></div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-label">Amount</div>
+                            <div class="detail-value">₹<?php echo number_format($payment['Amount'], 2); ?></div>
+                        </div>
+
+                        <?php if (!empty(trim($payment['UTRNumber'] ?? ''))): ?>
+                        <div class="detail-item">
+                            <div class="detail-label">UTR Number</div>
+                            <div class="detail-value"><?php echo htmlspecialchars($payment['UTRNumber']); ?></div>
+                        </div>
+                        <?php endif; ?>
+
+                        <div class="detail-item">
+                            <div class="detail-label">Staff name</div>
+                            <div class="detail-value"><?php echo !empty(trim($payment['StaffName'] ?? '')) ? htmlspecialchars($payment['StaffName']) : '—'; ?></div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-label">Status</div>
+                            <div class="detail-value">
+                                <span class="status-badge status-<?php echo strtolower($payment['Status']); ?>">
+                                    <?php echo $payment['Status']; ?>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-label">Scheme</div>
+                            <div class="detail-value"><?php echo htmlspecialchars($payment['SchemeName']); ?></div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-label">Submitted Date</div>
+                            <div class="detail-value"><?php echo date('M d, Y H:i', strtotime($payment['SubmittedAt'])); ?></div>
+                        </div>
+
+                        <?php if ($payment['Status'] !== 'Pending' && $payment['VerifiedAt']): ?>
+                            <div class="detail-item">
+                                <div class="detail-label">Verified/Rejected Date</div>
+                                <div class="detail-value"><?php echo date('M d, Y H:i', strtotime($payment['VerifiedAt'])); ?></div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php if ($payment['Status'] !== 'Pending' && $payment['VerifierName']): ?>
+                        <div class="verifier-info">
+                            <i class="fas fa-user-shield"></i> <?php echo $payment['Status']; ?> by <strong><?php echo htmlspecialchars($payment['VerifierName']); ?></strong>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="payment-history-card">
+                    <h2 class="section-title">Payment History</h2>
+
+                    <?php if (!empty($otherPayments)): ?>
+                        <table class="payment-history-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($otherPayments as $otherPayment): ?>
+                                    <tr>
+                                        <td><?php echo date('M d, Y', strtotime($otherPayment['SubmittedAt'])); ?></td>
+                                        <td>₹<?php echo number_format($otherPayment['Amount'], 2); ?></td>
+                                        <td>
+                                            <span class="status-badge status-<?php echo strtolower($otherPayment['Status']); ?>">
+                                                <?php echo $otherPayment['Status']; ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="view.php?id=<?php echo $otherPayment['PaymentID']; ?>" class="action-btn view-btn" style="padding: 4px 8px; font-size: 12px;">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php else: ?>
+                        <p class="no-data">No previous payments found for this customer and scheme.</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="customer-info-card">
+                    <h2 class="section-title">Customer Information</h2>
+
+                    <div class="customer-header">
+                        <div class="customer-avatar">
+                            <?php if ($payment['CustomerImage']): ?>
+                                <img src="../../customer/profile/<?php echo htmlspecialchars($payment['CustomerImage']); ?>" alt="<?php echo htmlspecialchars($payment['CustomerName']); ?>">
+                            <?php else: ?>
+                                <?php
+                                $initials = '';
+                                $nameParts = explode(' ', $payment['CustomerName']);
+                                if (count($nameParts) >= 2) {
+                                    $initials = strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1));
+                                } else {
+                                    $initials = strtoupper(substr($payment['CustomerName'], 0, 2));
+                                }
+                                echo $initials;
+                                ?>
+                            <?php endif; ?>
+                        </div>
+                        <div>
+                            <div class="customer-name"><?php echo htmlspecialchars($payment['CustomerName']); ?></div>
+                            <div class="customer-id"><?php echo $payment['CustomerUniqueID']; ?></div>
+                        </div>
+                    </div>
+
+                    <div class="contact-badge">
+                        <i class="fas fa-phone"></i> <?php echo htmlspecialchars($payment['CustomerContact']); ?>
+                    </div>
+
+                    <?php if ($payment['CustomerEmail']): ?>
+                        <div class="contact-badge" style="margin-left: 10px;">
+                            <i class="fas fa-envelope"></i> <?php echo htmlspecialchars($payment['CustomerEmail']); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <div style="margin-top: 20px;">
+                        <a href="../customers/view.php?id=<?php echo $payment['CustomerID']; ?>" class="action-btn view-btn" style="width: 100%; justify-content: center; margin-right: 0;">
+                            <i class="fas fa-user"></i> View Customer Profile
+                        </a>
+                    </div>
+                </div>
+
+                <?php if ($payment['PromoterName']): ?>
+                    <div class="customer-info-card">
+                        <h2 class="section-title">Promoter Information</h2>
+
+                        <div class="detail-item">
+                            <div class="detail-label">Promoter Name</div>
+                            <div class="detail-value"><?php echo htmlspecialchars($payment['PromoterName']); ?></div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-label">Promoter ID</div>
+                            <div class="detail-value"><?php echo $payment['PromoterUniqueID']; ?></div>
+                        </div>
+
+                        <?php if ($payment['PromoterContact']): ?>
+                            <div class="detail-item">
+                                <div class="detail-label">Contact</div>
+                                <div class="detail-value"><?php echo htmlspecialchars($payment['PromoterContact']); ?></div>
+                            </div>
+                        <?php endif; ?>
+
+                        <div style="margin-top: 15px;">
+                            <a href="../promoters/view.php?id=<?php echo $payment['PromoterID']; ?>" class="action-btn view-btn" style="width: 100%; justify-content: center; margin-right: 0;">
+                                <i class="fas fa-user-tie"></i> View Promoter Profile
+                            </a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($subscriptions)): ?>
+                    <div class="customer-info-card">
+                        <h2 class="section-title">Active Subscriptions</h2>
+
+                        <?php foreach ($subscriptions as $subscription): ?>
+                            <div class="subscription-item">
+                                <div>
+                                    <div class="subscription-name"><?php echo htmlspecialchars($subscription['SchemeName']); ?></div>
+                                    <div class="subscription-dates">
+                                        <?php echo date('M d, Y', strtotime($subscription['StartDate'])); ?> -
+                                        <?php echo date('M d, Y', strtotime($subscription['EndDate'])); ?>
+                                    </div>
+                                </div>
+                                <span class="status-badge status-verified">
+                                    <?php echo $subscription['RenewalStatus']; ?>
+                                </span>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="modal" id="imageModal" onclick="hideImageModal()">
+        <div class="modal-content">
+            <span class="close-modal" onclick="hideImageModal()">&times;</span>
+            <img src="" alt="Payment Screenshot" class="modal-image" id="modalImage">
+        </div>
+    </div>
+
+    <!-- Action Modal -->
+    <div class="action-modal" id="actionModal">
+        <div class="action-modal-content" style="max-width: 520px;">
+            <div class="action-modal-title" id="actionModalTitle">Verify Payment</div>
+            <div class="action-modal-body">
+                <?php if ($isFirstPayment && !empty($viewCommissionItems)): ?>
+                    <div style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px;padding:14px 16px;margin-bottom:15px;text-align:left;">
+                        <strong style="color:#1b5e20;font-size:14px;display:block;margin-bottom:8px;letter-spacing:0.3px;">
+                            <i class="fas fa-coins me-2"></i> Promoter Commissions Allocation:
+                        </strong>
+                        <div style="display:flex;flex-direction:column;gap:8px;">
+                            <?php foreach ($viewCommissionItems as $item): ?>
+                                <div style="display:flex;justify-content:space-between;align-items:center;background:#ffffff;padding:8px 12px;border-radius:6px;border-left:3px solid #2e7d32;font-size:14px;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+                                    <div>
+                                        <strong style="color:#212529;"><?php echo htmlspecialchars($item['role']); ?>:</strong> 
+                                        <span style="color:#2c3e50;font-weight:600;"><?php echo htmlspecialchars($item['name']); ?></span> 
+                                        <span style="color:#6c757d;font-size:12px;">(<?php echo htmlspecialchars($item['id']); ?>)</span>
+                                    </div>
+                                    <span style="color:#2e7d32;font-weight:700;font-size:14px;background:#d1e7dd;padding:2px 8px;border-radius:10px;">+ ₹<?php echo number_format($item['amount'], 2); ?></span>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <form id="actionForm" method="POST">
+                    <input type="hidden" name="payment_id" value="<?php echo $paymentId; ?>">
+                    <input type="hidden" name="action" id="actionType" value="">
+                    <textarea name="remarks" class="remarks-input" placeholder="Enter remarks (optional)"></textarea>
+                    <div class="action-modal-buttons">
+                        <button type="button" class="modal-btn modal-cancel-btn" onclick="hideActionModal()">Cancel</button>
+                        <button type="submit" class="modal-btn modal-confirm-btn" id="confirmActionBtn">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show/hide image modal
+        function showImageModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+
+            modalImage.src = imageSrc;
+            modal.style.display = 'flex';
+
+            // Prevent body scrolling when modal is open
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+
+            // Re-enable body scrolling
+            document.body.style.overflow = 'auto';
+        }
+
+        // Show/hide action modal
+        function showActionModal(action) {
+            const modal = document.getElementById('actionModal');
+            const modalTitle = document.getElementById('actionModalTitle');
+            const actionType = document.getElementById('actionType');
+            const confirmBtn = document.getElementById('confirmActionBtn');
+
+            // Set appropriate title and button style based on action
+            if (action === 'verify') {
+                modalTitle.textContent = 'Verify Payment';
+                confirmBtn.className = 'modal-btn modal-confirm-btn';
+                confirmBtn.style.background = '#2ecc71';
+            } else {
+                modalTitle.textContent = 'Reject Payment';
+                confirmBtn.className = 'modal-btn modal-confirm-btn';
+                confirmBtn.style.background = '#e74c3c';
+            }
+
+            // Set form action
+            actionType.value = action;
+
+            // Show modal
+            modal.style.display = 'flex';
+
+            // Focus on remarks input
+            setTimeout(() => {
+                document.querySelector('.remarks-input').focus();
+            }, 100);
+
+            // Prevent body scrolling
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideActionModal() {
+            document.getElementById('actionModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modals on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideImageModal();
+                hideActionModal();
+            }
+        });
+
+        // Handle form validation
+        document.getElementById('actionForm').addEventListener('submit', function(e) {
+            const action = document.getElementById('actionType').value;
+            const confirmMessage = action === 'verify' ?
+                'Are you sure you want to verify this payment?' :
+                'Are you sure you want to reject this payment?';
+
+            if (!confirm(confirmMessage)) {
+                e.preventDefault();
+            }
+
+            // Add loading state to button
+            if (!e.defaultPrevented) {
+                const confirmBtn = document.getElementById('confirmActionBtn');
+                confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                confirmBtn.disabled = true;
+            }
+        });
+
+        // Stop propagation for modal content clicks
+        document.querySelector('.modal-content').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        document.querySelector('.action-modal-content').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Close action modal when clicking outside
+        document.getElementById('actionModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideActionModal();
+            }
+        });
+
+        // Add print functionality
+        function printPaymentDetails() {
+            const originalContents = document.body.innerHTML;
+
+            // Create a version optimized for printing
+            const printContents = document.querySelector('.payment-details-container').innerHTML;
+
+            document.body.innerHTML = `
+                <div style="padding: 20px;">
+                    <h1 style="text-align: center; margin-bottom: 20px;">Payment Details #<?php echo $payment['PaymentID']; ?></h1>
+                    ${printContents}
+                </div>
+            `;
+
+            window.print();
+
+            // Restore original contents
+            document.body.innerHTML = originalContents;
+
+            // Reattach event handlers
+            attachEventHandlers();
+        }
+
+        // Function to reattach event handlers after printing
+        function attachEventHandlers() {
+            // Re-attach modal events
+            document.querySelector('.payment-screenshot')?.addEventListener('click', function() {
+                showImageModal(this.src);
+            });
+
+            // Re-attach action buttons
+            document.querySelector('.verify-btn')?.addEventListener('click', function() {
+                showActionModal('verify');
+            });
+
+            document.querySelector('.reject-btn')?.addEventListener('click', function() {
+                showActionModal('reject');
+            });
+
+            // Re-initialize other event handlers...
+        }
+
+        // Add a print button to the action buttons area
+        document.addEventListener('DOMContentLoaded', function() {
+            const actionBtns = document.querySelector('.action-btns');
+            const printButton = document.createElement('button');
+            printButton.className = 'action-btn';
+            printButton.style.background = 'linear-gradient(135deg, #0B5CAD, #08437f)';
+            printButton.style.boxShadow = '0 2px 5px rgba(11, 92, 173, 0.3)';
+            printButton.innerHTML = '<i class="fas fa-print"></i> Print';
+            printButton.addEventListener('click', printPaymentDetails);
+            actionBtns.appendChild(printButton);
+
+            // Add copy functionality for payment ID, amount, etc.
+            document.querySelectorAll('.detail-value').forEach(element => {
+                if (!element.querySelector('.status-badge')) {
+                    element.style.cursor = 'pointer';
+                    element.setAttribute('title', 'Click to copy');
+                    element.addEventListener('click', function() {
+                        const textToCopy = this.textContent.trim();
+                        navigator.clipboard.writeText(textToCopy).then(() => {
+                            // Show temporary tooltip
+                            const tooltip = document.createElement('div');
+                            tooltip.textContent = 'Copied!';
+                            tooltip.style.position = 'absolute';
+                            tooltip.style.background = '#333';
+                            tooltip.style.color = 'white';
+                            tooltip.style.padding = '5px 10px';
+                            tooltip.style.borderRadius = '3px';
+                            tooltip.style.fontSize = '12px';
+                            tooltip.style.zIndex = '1000';
+                            tooltip.style.opacity = '0';
+                            tooltip.style.transition = 'opacity 0.3s ease';
+
+                            // Position the tooltip
+                            const rect = this.getBoundingClientRect();
+                            tooltip.style.top = `${rect.top - 30}px`;
+                            tooltip.style.left = `${rect.left + rect.width / 2 - 30}px`;
+
+                            document.body.appendChild(tooltip);
+
+                            // Show, then hide
+                            setTimeout(() => {
+                                tooltip.style.opacity = '1';
+                            }, 10);
+                            setTimeout(() => {
+                                tooltip.style.opacity = '0';
+                                setTimeout(() => {
+                                    document.body.removeChild(tooltip);
+                                }, 300);
+                            }, 1500);
+                        });
+                    });
+                }
+            });
+        });
+
+        // Enable image zoom functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentImage = document.querySelector('.payment-screenshot');
+            const modalImage = document.getElementById('modalImage');
+
+            if (paymentImage && modalImage) {
+                let scale = 1;
+                let panning = false;
+                let pointX = 0;
+                let pointY = 0;
+                let start = {
+                    x: 0,
+                    y: 0
+                };
+
+                function setTransform() {
+                    modalImage.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+                }
+
+                // Zoom in and out with mouse wheel
+                modalImage.addEventListener('wheel', function(e) {
+                    e.preventDefault();
+
+                    const xs = (e.clientX - pointX) / scale;
+                    const ys = (e.clientY - pointY) / scale;
+
+                    // Adjust scale based on wheel direction
+                    scale += e.deltaY * -0.01;
+
+                    // Restrict scale
+                    scale = Math.min(Math.max(1, scale), 4);
+
+                    pointX = e.clientX - xs * scale;
+                    pointY = e.clientY - ys * scale;
+
+                    setTransform();
+                });
+
+                // Reset zoom when the modal is closed or a new image is shown
+                document.getElementById('imageModal').addEventListener('hide', function() {
+                    scale = 1;
+                    pointX = 0;
+                    pointY = 0;
+                    setTransform();
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+/mainWebsite
+/onemorewebsite
+
+# SMS and WhatsApp log files (generated at runtime)
+config/sms_log.txt
+config/whatsapp_log.txt
+logs/
+
+# User uploads (generated at runtime)
+uploads/
+customer/payments/uploads/
+customer/profile/editProfile/uploads/
+customer/profile/uploads/
+customer/uploads/
+shop/uploads/
+admin/extras/logs/
+
