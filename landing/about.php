@@ -312,7 +312,7 @@ require_once("../config/config.php");
                         <div class="step-num-badge">1</div>
                         <div>
                             <h5 class="mb-1">Select Your Scheme</h5>
-                            <p class="text-muted mb-0">Choose a monthly installment plan from ₹500 to ₹5,000 based on your home upgrade timeline.</p>
+                            <p class="text-muted mb-0">Monthly installment plan of ₹1000 based on your home upgrade timeline.</p>
                         </div>
                     </div>
 
@@ -327,8 +327,8 @@ require_once("../config/config.php");
                     <div class="step-block">
                         <div class="step-num-badge">3</div>
                         <div>
-                            <h5 class="mb-1">Take Home Your Products</h5>
-                            <p class="text-muted mb-0">Pick your dream furniture sets or smart electronic appliances with doorstep delivery and manufacturer warranty.</p>
+                            <h5 class="mb-1">Win Exciting Prizes</h5>
+                            <p class="text-muted mb-0">Active members get automatic entries into monthly draws to win premium furniture, electronics, and exclusive rewards.</p>
                         </div>
                     </div>
                 </div>
@@ -340,32 +340,6 @@ require_once("../config/config.php");
         </div>
     </section>
 
-    <!-- Leadership / Managing Director Message -->
-    <section class="py-5" style="background: #ffffff;">
-        <div class="container py-4">
-            <div class="md-card">
-                <div class="row align-items-center g-5">
-                    <div class="col-lg-4 text-center">
-                        <a href="https://www.linkedin.com/in/sameer-akbar-27966033b/" target="_blank" title="Sameer Akbar on LinkedIn">
-                            <img src="./landing_assets/images/sameer.png" alt="Sameer Akbar, MD" class="img-fluid" style="width: 240px; height: 240px; border-radius: 50%; object-fit: cover; border: 4px solid var(--brand-magenta); box-shadow: 0 8px 24px rgba(155, 0, 144, 0.25);">
-                        </a>
-                        <h4 class="mt-3 mb-1">Sameer Akbar</h4>
-                        <div class="text-muted fw-semibold">Managing Director</div>
-                        <div class="small" style="color: var(--brand-magenta);">Pro Gee Dee Ventures Pvt. Ltd.</div>
-                    </div>
-                    <div class="col-lg-8">
-                        <div style="color: var(--brand-magenta); font-size: 3rem; line-height: 1;">&#10077;</div>
-                        <div class="md-quote">
-                            "At Liya's Furniture & Electronics, our mission is to build lasting trust by empowering families to elevate their living spaces without financial stress. With transparent monthly savings, guaranteed value, and the backing of Pro Gee Dee Ventures, we are committed to making dream homes a tangible reality for everyone."
-                        </div>
-                        <p class="text-muted mb-0">
-                            Our team stands dedicated to exceptional customer service, ethical commerce, and delivering unmatched value across our showroom and digital platforms.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Frequently Asked Questions -->
     <section class="py-5" style="background: var(--light-bg); border-top: 1px solid var(--border-subtle);">
@@ -385,7 +359,7 @@ require_once("../config/config.php");
                             <i class="fas fa-chevron-down"></i>
                         </div>
                         <div class="faq-answer">
-                            It is a structured monthly savings plan where members contribute a fixed sum each month (e.g. ₹500, ₹1000, ₹2500, ₹5000). At maturity or upon winning monthly draws, 100% of your accumulated contributions are redeemable for luxury furniture, modular interiors, or smart home appliances from our showroom.
+                            It is a structured monthly savings plan where members contribute a fixed sum each month ₹1000 At maturity or upon winning monthly draws, 100% of your accumulated contributions are redeemable for luxury furniture, modular interiors, or smart home appliances from our showroom.
                         </div>
                     </div>
 
@@ -400,10 +374,7 @@ require_once("../config/config.php");
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question">
-                            <span>Can I choose which furniture or electronics I want?</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
+                 
                         <div class="faq-answer">
                             Yes! You have complete freedom to select from our comprehensive showroom collection, including sofa sets, dining tables, bedroom suites, 4K Smart TVs, refrigerators, washing machines, and kitchen appliances.
                         </div>
@@ -434,38 +405,6 @@ require_once("../config/config.php");
         </div>
     </section>
 
-    <!-- Login Modal -->
-    <div class="modal-overlay" id="loginModal">
-        <div class="login-modal" style="background:#fff; padding:32px; border-radius:16px; width:90%; max-width:420px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); margin:auto;">
-            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-                <h4 class="m-0 fw-bold">Sign In to Liya's</h4>
-                <button onclick="closeLoginModal()" style="background:none;border:none;font-size:1.4rem;color:#94a3b8;cursor:pointer;"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="d-flex flex-column gap-3">
-                <a href="../customer" class="p-3 border rounded-3 d-flex align-items-center gap-3 text-dark text-decoration-none" style="transition:all 0.2s;" onmouseover="this.style.borderColor='#9B0090'" onmouseout="this.style.borderColor='#e2e8f0'">
-                    <i class="fas fa-user-circle fs-3" style="color:var(--brand-magenta);"></i>
-                    <div>
-                        <div class="fw-bold">Customer Portal</div>
-                        <small class="text-muted">Track payments & schemes</small>
-                    </div>
-                </a>
-                <a href="../promoter" class="p-3 border rounded-3 d-flex align-items-center gap-3 text-dark text-decoration-none" style="transition:all 0.2s;" onmouseover="this.style.borderColor='#9B0090'" onmouseout="this.style.borderColor='#e2e8f0'">
-                    <i class="fas fa-user-tie fs-3" style="color:var(--brand-blue);"></i>
-                    <div>
-                        <div class="fw-bold">Promoter Portal</div>
-                        <small class="text-muted">Manage member enrollments</small>
-                    </div>
-                </a>
-                <a href="../admin" class="p-3 border rounded-3 d-flex align-items-center gap-3 text-dark text-decoration-none" style="transition:all 0.2s;" onmouseover="this.style.borderColor='#9B0090'" onmouseout="this.style.borderColor='#e2e8f0'">
-                    <i class="fas fa-shield-alt fs-3" style="color:#64748b;"></i>
-                    <div>
-                        <div class="fw-bold">Admin Portal</div>
-                        <small class="text-muted">Management & oversight</small>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer Component -->
     <?php include '../components/footer.php'; ?>

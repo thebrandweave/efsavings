@@ -252,10 +252,8 @@ if (strpos($scriptDir, '/shop') !== false) {
             <ul>
                 <li><a href="<?php echo $landingBase; ?>/"><i class="fas fa-chevron-right"></i> Home</a></li>
                 <li><a href="<?php echo $landingBase; ?>/about.php"><i class="fas fa-chevron-right"></i> About Us</a></li>
-                <li><a href="<?php echo $landingBase; ?>/#schemes"><i class="fas fa-chevron-right"></i> Savings Schemes</a></li>
-                <li><a href="<?php echo $landingBase; ?>/#categories"><i class="fas fa-chevron-right"></i> Furniture & Electronics</a></li>
-                <li><a href="<?php echo $landingBase; ?>/career.php"><i class="fas fa-chevron-right"></i> Careers</a></li>
-                <li><a href="javascript:void(0)" onclick="openLoginModal()"><i class="fas fa-chevron-right"></i> Customer Login</a></li>
+   
+                <!-- <li><a href="javascript:void(0)" onclick="openLoginModal()"><i class="fas fa-chevron-right"></i> Customer Login</a></li> -->
             </ul>
         </div>
 
@@ -278,19 +276,19 @@ if (strpos($scriptDir, '/shop') !== false) {
             <div class="contact-info">
                 <div class="contact-item">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>Ground Floor, Sri Mantame Complex, Near Soorya Infotech Park, Mudipu Road, Kurnadu, Bantwal - 574153, Karnataka, India</span>
+                    <span>Sheshashayi complex, Seebinekere, Thirthahalli, Karnataka 577432, India</span>
                 </div>
                 <div class="contact-item">
                     <i class="fas fa-phone-alt"></i>
-                    <span>+91 99951 94472 / +91 81057 53472</span>
+                    <span>+91 97411 27257</span>
                 </div>
-                <div class="contact-item">
+                <!-- <div class="contact-item">
                     <i class="fas fa-envelope"></i>
                     <span>info@efsavings.in</span>
-                </div>
+                </div> -->
                 <div class="contact-item">
                     <i class="fas fa-clock"></i>
-                    <span>Monday - Sunday: 9:30 AM - 7:00 PM</span>
+                    <span>Monday - Sunday: 9:30 AM - 8:00 PM</span>
                 </div>
             </div>
         </div>

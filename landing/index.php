@@ -1160,7 +1160,7 @@
                         <div class="trust-item">
                             <div class="trust-icon"><i class="fas fa-wallet"></i></div>
                             <div class="trust-text">
-                                <h4>From ₹500/Month</h4>
+                                <h4>From ₹1000/Month</h4>
                                 <p>Accessible & flexible schemes</p>
                             </div>
                         </div>
@@ -1196,45 +1196,34 @@
             </div>
         </section>
 
-        <!-- ========================================================
-             SCHEMES SHOWCASE SECTION
-             ======================================================== -->
-        <section class="schemes-section" id="schemes">
-            <div class="container">
-                <div class="section-header">
+<!-- ========================================================
+     SCHEMES SHOWCASE SECTION
+     ======================================================== -->
+<section class="schemes-section" id="schemes">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            
+            <!-- Grid 1: Headers & Section Intro -->
+            <div class="col-lg-4">
+                <div class="section-header text-start mb-0">
                     <span class="section-tag">Featured Savings Plans</span>
-                    <h2>Choose Your Savings Scheme</h2>
+                    <h2>Our Savings Scheme</h2>
                     <p>Select a plan that aligns with your home upgrade ambitions. Accumulate value month-by-month and enjoy guaranteed product settlement.</p>
                 </div>
+            </div>
 
-                <div class="row g-4 justify-content-center">
+            <!-- Grid 2: Plans Showcase -->
+            <div class="col-lg-8">
+                <div class="row g-3 justify-content-center">
                     
-                    <!-- Scheme 1: Silver -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="scheme-card">
-                            <div class="scheme-header-box">
-                                <h3 class="scheme-name">Silver Plan</h3>
-                                <div class="scheme-price">₹500 <span>/ month</span></div>
-                            </div>
-                            <ul class="scheme-features">
-                                <li><i class="fas fa-check-circle"></i> Small Kitchen Appliances</li>
-                                <li><i class="fas fa-check-circle"></i> Soundbars & Speakers</li>
-                                <li><i class="fas fa-check-circle"></i> Monthly Draw Entry</li>
-                                <li><i class="fas fa-check-circle"></i> 100% Value Redemption</li>
-                                <li><i class="fas fa-check-circle"></i> 12 / 24 Months Tenure</li>
-                            </ul>
-                            <button onclick="openLoginModal()" class="btn-brand-outline w-100 justify-content-center">
-                                Join Plan
-                            </button>
-                        </div>
-                    </div>
+     
 
-                    <!-- Scheme 2: Gold (Popular) -->
-                    <div class="col-lg-3 col-md-6">
+                    <!-- Scheme 2: Gold Plan (Popular) -->
+                    <div class="col-md-10">
                         <div class="scheme-card popular">
                             <div class="popular-badge">Most Popular</div>
                             <div class="scheme-header-box">
-                                <h3 class="scheme-name">Gold Plan</h3>
+                                <h3 class="scheme-name">Monthly Plan</h3>
                                 <div class="scheme-price">₹1,000 <span>/ month</span></div>
                             </div>
                             <ul class="scheme-features">
@@ -1250,116 +1239,14 @@
                         </div>
                     </div>
 
-                    <!-- Scheme 3: Diamond -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="scheme-card">
-                            <div class="scheme-header-box">
-                                <h3 class="scheme-name">Diamond Plan</h3>
-                                <div class="scheme-price">₹2,500 <span>/ month</span></div>
-                            </div>
-                            <ul class="scheme-features">
-                                <li><i class="fas fa-check-circle"></i> 55" 4K Ultra HD Smart TVs</li>
-                                <li><i class="fas fa-check-circle"></i> Double Door Refrigerators</li>
-                                <li><i class="fas fa-check-circle"></i> Queen/King Bedroom Sets</li>
-                                <li><i class="fas fa-check-circle"></i> 4x Monthly Draw Tickets</li>
-                                <li><i class="fas fa-check-circle"></i> Free Installation & Support</li>
-                            </ul>
-                            <button onclick="openLoginModal()" class="btn-brand-outline w-100 justify-content-center">
-                                Join Plan
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Scheme 4: Platinum Executive -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="scheme-card">
-                            <div class="scheme-header-box">
-                                <h3 class="scheme-name">Platinum Plan</h3>
-                                <div class="scheme-price">₹5,000 <span>/ month</span></div>
-                            </div>
-                            <ul class="scheme-features">
-                                <li><i class="fas fa-check-circle"></i> Full Living Room Makeover</li>
-                                <li><i class="fas fa-check-circle"></i> Side-by-Side Smart Fridges</li>
-                                <li><i class="fas fa-check-circle"></i> Inverter ACs & Wash Towers</li>
-                                <li><i class="fas fa-check-circle"></i> VIP Bumper Draw Access</li>
-                                <li><i class="fas fa-check-circle"></i> Custom Woodwork Options</li>
-                            </ul>
-                            <button onclick="openLoginModal()" class="btn-brand-outline w-100 justify-content-center">
-                                Join Plan
-                            </button>
-                        </div>
-                    </div>
-
                 </div>
             </div>
-        </section>
 
-        <!-- ========================================================
-             CATEGORIES / BENTO SHOWCASE
-             ======================================================== -->
-        <section class="categories-section" id="categories">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-tag">Explore Collections</span>
-                    <h2>Furniture & Electronics Catalogue</h2>
-                    <p>Hand-selected premium furniture and top-tier consumer electronics curated to elevate every corner of your living space.</p>
-                </div>
+        </div>
+    </div>
+</section>
 
-                <div class="bento-grid-custom">
-                    
-                    <!-- Bento 1: Living Room (8 col) -->
-                    <div class="bento-box col-span-8" style="background-image: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1200&auto=format&fit=crop');">
-                        <div class="bento-content">
-                            <span class="bento-tag">Furniture Collection</span>
-                            <h3 class="bento-title">Designer Living Rooms & Sofas</h3>
-                            <p class="bento-desc">Sectional recliners, teakwood center tables, and luxurious fabric suites tailored for sophisticated family comfort.</p>
-                            <span class="bento-link">Explore Living Room <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </div>
 
-                    <!-- Bento 2: 4K Smart TVs (4 col) -->
-                    <div class="bento-box col-span-4" style="background-image: url('https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=800&auto=format&fit=crop');">
-                        <div class="bento-content">
-                            <span class="bento-tag">Home Entertainment</span>
-                            <h3 class="bento-title">Smart 4K UHD TVs</h3>
-                            <p class="bento-desc">Cinematic displays and Dolby Atmos sound systems.</p>
-                            <span class="bento-link">View TVs <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </div>
-
-                    <!-- Bento 3: Kitchen Tech (4 col) -->
-                    <div class="bento-box col-span-4" style="background-image: url('https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800&auto=format&fit=crop');">
-                        <div class="bento-content">
-                            <span class="bento-tag">Kitchen Appliances</span>
-                            <h3 class="bento-title">Modern Kitchen Tech</h3>
-                            <p class="bento-desc">Smart refrigerators, microwaves, and modular kitchen accessories.</p>
-                            <span class="bento-link">Browse Appliances <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </div>
-
-                    <!-- Bento 4: Master Bedroom (4 col) -->
-                    <div class="bento-box col-span-4" style="background-image: url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=800&auto=format&fit=crop');">
-                        <div class="bento-content">
-                            <span class="bento-tag">Bedroom Comfort</span>
-                            <h3 class="bento-title">Master Bedroom Sets</h3>
-                            <p class="bento-desc">King-size beds, ergonomic mattresses, and sliding wardrobes.</p>
-                            <span class="bento-link">View Bedrooms <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </div>
-
-                    <!-- Bento 5: Dining & Decor (4 col) -->
-                    <div class="bento-box col-span-4" style="background-image: url('https://images.unsplash.com/photo-1617806118233-18e1de247200?q=80&w=800&auto=format&fit=crop');">
-                        <div class="bento-content">
-                            <span class="bento-tag">Dining & Decor</span>
-                            <h3 class="bento-title">Solid Wood Dining Sets</h3>
-                            <p class="bento-desc">Marble and solid wood 6-seater dining collections.</p>
-                            <span class="bento-link">Explore Dining <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
 
         <!-- ========================================================
              HOW IT WORKS SECTION
@@ -1377,21 +1264,21 @@
                         <div class="step-card">
                             <div class="step-number">1</div>
                             <h3>Enroll in Your Plan</h3>
-                            <p>Select your comfortable monthly installment (₹500 to ₹5,000) and register your account in under 2 minutes.</p>
+                            <p>The monthly installment of ₹1000 and register your account in under 2 minutes.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="step-card">
                             <div class="step-number">2</div>
                             <h3>Pay Monthly & Unlock Draws</h3>
-                            <p>Make easy UPI or online payments each month. Receive instant digital receipts and automatic entry into monthly prize draws.</p>
+                            <p>Make easy UPI or online payments each month. Receive instant digital receipts to Customer Dashboard and automatic entry into monthly prize draws.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="step-card">
                             <div class="step-number">3</div>
-                            <h3>Redeem Dream Products</h3>
-                            <p>At maturity or upon draw win, redeem 100% of your accumulated value for your chosen furniture or electronic appliances.</p>
+                            <h3>Eligible for Monthly Prizes </h3>
+                            <p>Active members get automatic entries into monthly draws to win premium furniture, electronics, and exclusive rewards.</p>
                         </div>
                     </div>
                 </div>
@@ -1399,72 +1286,7 @@
         </section>
 
         <!-- ========================================================
-             SAVINGS CALCULATOR SECTION
-             ======================================================== -->
-        <section class="calc-section" id="calculator">
-            <div class="container">
-                <div class="row align-items-center g-5">
-                    
-                    <div class="col-lg-6">
-                        <div class="badge-brand" style="background: rgba(155, 0, 144, 0.2); color: #f5d0f2; border-color: rgba(155, 0, 144, 0.4);">
-                            <i class="fas fa-calculator"></i> Interactive Simulator
-                        </div>
-                        <h2 class="text-white mt-3 mb-3" style="font-size: 2.4rem;">
-                            Plan Your Savings, <br>
-                            <span class="text-gradient">See Your Future Home.</span>
-                        </h2>
-                        <p class="text-muted mb-4" style="color: #94A3B8 !important; font-size: 1.05rem;">
-                            Adjust your monthly budget and duration to estimate your accumulated product purchasing power and eligible bumper draw perks.
-                        </p>
-                        
-                        <div class="d-flex flex-column gap-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <i class="fas fa-check-circle text-magenta fs-5"></i>
-                                <span>Zero registration fees or processing charges</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-3">
-                                <i class="fas fa-check-circle text-blue fs-5"></i>
-                                <span>100% of money goes towards your furniture & electronics</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-3">
-                                <i class="fas fa-check-circle text-magenta fs-5"></i>
-                                <span>Exchangeable across our entire brand showroom</span>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-lg-6">
-                        <div class="calc-box">
-                            <div class="calc-slider-box">
-                                <label>
-                                    <span>Monthly Contribution:</span>
-                                    <span class="text-magenta fw-bold" id="monthlyDisplay">₹1,000 / mo</span>
-                                </label>
-                                <input type="range" class="calc-range" id="monthlyRange" min="500" max="10000" step="500" value="1000" oninput="updateCalculator()">
-                            </div>
-
-                            <div class="calc-slider-box">
-                                <label>
-                                    <span>Savings Duration:</span>
-                                    <span class="text-blue fw-bold" id="durationDisplay">12 Months</span>
-                                </label>
-                                <input type="range" class="calc-range" id="durationRange" min="6" max="24" step="6" value="12" oninput="updateCalculator()">
-                            </div>
-
-                            <div class="calc-result-card">
-                                <div class="text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px; opacity: 0.9;">Total Product Value</div>
-                                <div class="calc-result-val" id="totalResult">₹12,000</div>
-                                <div class="small mb-3" style="opacity: 0.9;" id="drawsTicketDisplay">+ 12 Monthly Lucky Draw Entries Included</div>
-                                <button onclick="openLoginModal()" class="btn-brand-white w-100 justify-content-center">
-                                    Start This Plan
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
 
         <!-- ========================================================
              CONTINUOUS GALLERY SHOWCASE
@@ -1491,61 +1313,35 @@
         </section>
 
         <!-- ========================================================
-             PARENT GROUP / PRO GEE DEE VENTURES ECOSYSTEM
-             ======================================================== -->
-        <section class="ecosystem-section">
-            <div class="container text-center">
-                <div class="badge-brand mb-2">Corporate Lineage</div>
-                <h3 class="mb-2">A Proud Unit of Pro Gee Dee Ventures Pvt. Ltd.</h3>
-                <p class="text-muted" style="max-width: 600px; margin: 0 auto 30px;">
-                    Liya's Furniture & Electronics operates under the corporate umbrella of Pro Gee Dee Ventures Pvt. Ltd., committed to delivering ethical excellence across retail, technology, and customer savings.
-                </p>
-
-                <div class="ecosystem-grid">
-                    <a href="https://thebrandweave.com/" target="_blank" class="ecosystem-item" title="The Brand Weave">
-                        <img src="landing_assets/images/gdlogo5.png" alt="The Brand Weave">
-                    </a>
-                    <a href="https://liyasgoldanddiamonds.com/" target="_blank" class="ecosystem-item" title="Liya's Gold & Diamonds">
-                        <img src="landing_assets/images/gdlogo6.png" alt="Liya's Gold and Diamonds">
-                    </a>
-                    <a href="https://gdedutech.com/" target="_blank" class="ecosystem-item" title="GD EduTech">
-                        <img src="landing_assets/images/gdlogo2.png" alt="GD EduTech">
-                    </a>
-                    <a href="https://liyasinternational.com/" target="_blank" class="ecosystem-item" title="Liya's International">
-                        <img src="landing_assets/images/gdlogo3.webp" alt="Liya's International">
-                    </a>
-                    <a href="https://shop.goldendream.in/" target="_blank" class="ecosystem-item" title="Golden Dream">
-                        <img src="landing_assets/images/gdlogo1.png" alt="Golden Dream">
-                    </a>
-                </div>
-            </div>
-        </section>
+ 
 
         <!-- ========================================================
              CTA BANNER
-             ======================================================== -->
-        <section class="cta-section">
-            <div class="container">
-                <div class="cta-box">
-                    <div class="row align-items-center">
-                        <div class="col-lg-8">
-                            <h2>Ready to Furnish Your Dream Home?</h2>
-                            <p>
-                                Join thousands of satisfied families upgrading their living spaces with zero stress. Start saving from ₹500/month today and qualify for our upcoming bumper draw!
-                            </p>
-                            <div class="d-flex gap-3 flex-wrap">
-                                <button onclick="openLoginModal()" class="btn-brand-white">
-                                    <i class="fas fa-user-plus"></i> Join Savings Scheme
-                                </button>
-                                <a href="./about.php" class="hero-btn-outline" style="border-color: rgba(255,255,255,0.4);">
-                                    <i class="fas fa-envelope"></i> Contact Advisors
-                                </a>
-                            </div>
-                        </div>
+<!-- ========================================================
+     CTA SECTION
+     ======================================================== -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h2>Explore Our Electronics & Furniture Store</h2>
+                    <p>
+                        Discover a wide selection of premium home furnishings and modern smart electronics. Visit our official website to browse our complete collection and shop today!
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="https://liyaselectronicsandfurniture.com/" target="_blank" class="btn-brand-white">
+                            <i class="fas fa-store"></i> Visit Main Website
+                        </a> 
+                        <a href="https://liyaselectronicsandfurniture.com/contact" target="_blank" class="hero-btn-outline" style="border-color: rgba(255,255,255,0.4);">
+                            <i class="fas fa-envelope"></i> Contact Us
+                        </a>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
     </main>
 
@@ -1585,15 +1381,7 @@
                     </div>
                 </a>
 
-                <a href="../admin" class="login-choice-card">
-                    <div class="login-choice-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div class="login-choice-info">
-                        <h4>Admin Console</h4>
-                        <p>System management & financial operations</p>
-                    </div>
-                </a>
+               
             </div>
         </div>
     </div>

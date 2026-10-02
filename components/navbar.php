@@ -292,9 +292,7 @@ $activePage = basename($_SERVER['PHP_SELF']);
             <div class="nav-links-wrapper" id="navLinksMenu">
                 <a href="<?php echo $landingBase; ?>/" class="nav-link-item <?php echo ($activePage == 'index.php' || $activePage == 'index' || $activePage == '') ? 'active' : ''; ?>">Home</a>
                 <a href="<?php echo $landingBase; ?>/about.php" class="nav-link-item <?php echo ($activePage == 'about.php') ? 'active' : ''; ?>">About Us</a>
-                <a href="<?php echo $landingBase; ?>/#schemes" class="nav-link-item">Savings Schemes</a>
-                <a href="<?php echo $landingBase; ?>/#categories" class="nav-link-item">Collections</a>
-                <a href="<?php echo $landingBase; ?>/career.php" class="nav-link-item <?php echo ($activePage == 'career.php') ? 'active' : ''; ?>">Careers</a>
+       
                 <a href="<?php echo $landingBase; ?>/#contact" class="nav-link-item">Contact Us</a>
             </div>
 

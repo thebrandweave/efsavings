@@ -242,7 +242,7 @@ if (isLoggedIn()) {
         </form>
 
         <div class="signup-link">
-            <p class="mb-1" style="font-size: 0.9rem;">Don't have an account? <a href="../signup/">Sign up here</a></p>
+            <!-- <p class="mb-1" style="font-size: 0.9rem;">Don't have an account? <a href="../signup/">Sign up here</a></p> -->
             <p class="mb-0" style="font-size: 0.85rem;"><a href="../../landing/index.php" style="color: var(--text-secondary);"><i class="fas fa-arrow-left"></i> Return to Homepage</a></p>
         </div>
     </div>
