@@ -109,6 +109,12 @@ require_once  $c_path.'c_includes/loader.php';
 </button>
 
 <style>
+    body {
+        background: linear-gradient(135deg, #5b70a3 0%, #000000 100%) fixed !important;
+        background-attachment: fixed !important;
+        min-height: 100vh;
+    }
+
     .sidebar {
         width: 250px;
         height: 100vh;
@@ -202,7 +208,7 @@ require_once  $c_path.'c_includes/loader.php';
         color: #fff;
         background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
         box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
-        border-left: 3px solid #f59e0b;
+        border-left: 3px solid #f8f6f4;
     }
 
     .sidebar .nav-link i {
@@ -266,8 +272,7 @@ require_once  $c_path.'c_includes/loader.php';
         margin-left: 250px;
         padding: 20px;
         transition: all 0.3s ease;
-        background: #1A1D21;
-        /* Match sidebar background */
+        background: transparent !important;
     }
 
     @media (max-width: 768px) {

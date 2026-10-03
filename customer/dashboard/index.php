@@ -130,19 +130,20 @@ $pending_withdrawals = $stmt->fetch(PDO::FETCH_ASSOC)['pending_withdrawals'];
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --dark-bg: #0B0F19;
-            --card-bg: #111827;
-            --accent-brand: #9B0090;
-            --accent-blue: #0B5CAD;
-            --brand-gradient: linear-gradient(135deg, #9B0090 0%, #0B5CAD 100%);
+            --dark-bg: #071220;
+            --card-bg: #0c1e34;
+            --accent-brand: #0284c7;
+            --accent-blue: #0369a1;
+            --brand-gradient: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
             --text-primary: #F8FAFC;
             --text-secondary: #94A3B8;
-            --card-hover: #1E293B;
-            --border-color: rgba(255, 255, 255, 0.08);
+            --card-hover: #162a45;
+            --border-color: rgba(2, 132, 199, 0.22);
         }
 
         body {
-            background: var(--dark-bg);
+            background: linear-gradient(135deg, #5b70a3 0%, #000000 100%) fixed;
+            background-attachment: fixed;
             color: var(--text-primary);
             min-height: 100vh;
             margin: 0;
@@ -157,11 +158,11 @@ $pending_withdrawals = $stmt->fetch(PDO::FETCH_ASSOC)['pending_withdrawals'];
         }
 
         .dashboard-header {
-            background: linear-gradient(135deg, #9B0090 0%, #0B5CAD 100%);
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
             border-radius: 14px;
             padding: 24px 28px;
             margin-bottom: 24px;
-            box-shadow: 0 10px 30px rgba(155, 0, 144, 0.25);
+            box-shadow: 0 10px 30px rgba(2, 132, 199, 0.25);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -203,8 +204,8 @@ $pending_withdrawals = $stmt->fetch(PDO::FETCH_ASSOC)['pending_withdrawals'];
 
         .stats-card:hover {
             transform: translateY(-3px);
-            border-color: rgba(155, 0, 144, 0.35);
-            box-shadow: 0 8px 25px rgba(155, 0, 144, 0.15);
+            border-color: rgba(2, 132, 199, 0.45);
+            box-shadow: 0 8px 25px rgba(2, 132, 199, 0.2);
         }
 
         .stats-icon-wrap {
@@ -219,9 +220,9 @@ $pending_withdrawals = $stmt->fetch(PDO::FETCH_ASSOC)['pending_withdrawals'];
         }
 
         .stats-card:nth-child(1) .stats-icon-wrap {
-            background: rgba(155, 0, 144, 0.15);
-            color: #f5d0f2;
-            border: 1px solid rgba(155, 0, 144, 0.3);
+            background: rgba(2, 132, 199, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(2, 132, 199, 0.35);
         }
 
         .stats-card:nth-child(2) .stats-icon-wrap {
@@ -297,7 +298,7 @@ $pending_withdrawals = $stmt->fetch(PDO::FETCH_ASSOC)['pending_withdrawals'];
 
         .winner-item:hover {
             background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(155, 0, 144, 0.3);
+            border-color: rgba(2, 132, 199, 0.3);
         }
 
         .winner-item h5 {

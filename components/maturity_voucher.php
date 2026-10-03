@@ -681,7 +681,7 @@ if (file_exists($logoPath)) {
 
             <!-- Terms -->
             <div class="cert-terms">
-                Ground Floor, Sri Mantame Complex, Mudipu Road, Kurnadu, Bantwal - 574153, Karnataka | Ph: +91 99951 94472 | Email: info@efsavings.in<br>
+                Sheshashayi Complex, Seebinakere, Sagara Road, Thirthahalli, Karnataka | Ph: +91 99951 94472 | Email: info@efsavings.in<br>
                 Present this official voucher along with valid ID at Liya's Showroom to redeem your accumulated savings towards furniture and electronics.
             </div>
         </div>

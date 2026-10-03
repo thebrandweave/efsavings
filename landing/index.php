@@ -50,7 +50,7 @@
         },
         "address": {
             "@type": "PostalAddress",
-            "streetAddress": "Ground Floor, Sri Mantame Complex, Near Soorya Infotech Park, Kurnadu Post, Mudipu Road",
+            "streetAddress": "Sheshashayi Complex, Seebinakere, Sagara Road, Thirthahalli, Karnataka",
             "addressLocality": "Bantwal",
             "addressRegion": "Karnataka",
             "postalCode": "574153",

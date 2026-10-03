@@ -60,7 +60,7 @@ if ($shop_pos !== false) {
         <h4 class="footer-heading">Contact Info</h4>
         <div class="contact-item">
           <i class="bi bi-geo-alt"></i>
-          <span>2-108/C-7, Ground Floor, Sri Mantame Complex, Near Soorya Infotech Park, Kurnadu Post, Mudipu Road, Bantwal- 574153</span>
+          <span>2-108/C-7, Sheshashayi Complex, Seebinakere, Sagara Road, Thirthahalli, Karnataka, Bantwal- 574153</span>
         </div>
         <div class="contact-item">
           <i class="bi bi-envelope"></i>

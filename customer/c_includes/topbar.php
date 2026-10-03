@@ -182,8 +182,8 @@ if (empty($profileImageUrl)) {
     }
 
     .dropdown-menu {
-        background: #111827;
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: #0c1e34;
+        border: 1px solid rgba(2, 132, 199, 0.22);
         border-radius: 8px;
         padding: 8px;
         min-width: 180px;

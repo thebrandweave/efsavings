@@ -69,7 +69,8 @@ try {
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #071220;
+            background: linear-gradient(135deg, #5b70a3 0%, #000000 100%) fixed;
+            background-attachment: fixed;
             color: var(--text-primary);
             min-height: 100vh;
         }
@@ -79,6 +80,7 @@ try {
             padding: 95px 25px 40px;
             transition: all 0.3s ease;
             min-height: 100vh;
+            background: transparent;
         }
 
         @media (max-width: 768px) {
@@ -90,6 +92,7 @@ try {
 
         .page-header {
             margin-bottom: 25px;
+            margin-top: 70px;
         }
 
         .page-header h2 {

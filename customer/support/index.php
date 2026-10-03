@@ -94,7 +94,8 @@ try {
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #071220;
+            background: linear-gradient(135deg, #5b70a3 0%, #000000 100%) fixed;
+            background-attachment: fixed;
             color: var(--text-primary);
             min-height: 100vh;
         }
@@ -104,6 +105,7 @@ try {
             padding: 95px 25px 40px;
             transition: all 0.3s ease;
             min-height: 100vh;
+            background: transparent;
         }
 
         @media (max-width: 768px) {
@@ -115,6 +117,7 @@ try {
 
         .page-header {
             margin-bottom: 25px;
+            margin-top: 70px;
         }
 
         .page-header h2 {
@@ -472,7 +475,7 @@ try {
             <!-- Phone Helpline -->
             <a href="tel:+919995194472" class="channel-card">
                 <div class="channel-icon-wrap phone">
-                    <i class="fas fa-phone-alt"></i>
+                    <i class="fas fa-phone"></i>
                 </div>
                 <div class="channel-title">Phone Helpline</div>
                 <div class="channel-val">+91 99951 94472<br>+91 81057 53472</div>
@@ -500,7 +503,7 @@ try {
                 </div>
                 <div class="channel-title">Showroom & Desk</div>
                 <div class="channel-val">
-                    Ground Floor, Sri Mantame Complex, Mudipu Road, Kurnadu, Bantwal - 574153, Karnataka
+                    Sheshashayi Complex, Seebinakere, Sagara Road, Thirthahalli, Karnataka
                 </div>
                 <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">
                     <i class="fas fa-clock"></i> Mon - Sun: 9:30 AM - 7:00 PM
@@ -581,7 +584,7 @@ try {
                 </div>
 
                 <!-- FAQs -->
-                <div class="card-custom">
+                <!-- <div class="card-custom">
                     <div class="card-custom-header">
                         <i class="fas fa-circle-question" style="color: #fbbf24;"></i> Frequently Asked Questions
                     </div>
@@ -626,7 +629,7 @@ try {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

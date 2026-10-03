@@ -136,18 +136,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --dark-bg: #0B0F19;
-            --card-bg: #111827;
-            --accent-brand: #9B0090;
-            --accent-blue: #0B5CAD;
-            --accent-green: #0B5CAD;
+            --dark-bg: #071220;
+            --card-bg: #0c1e34;
+            --accent-brand: #0284c7;
+            --accent-blue: #0369a1;
+            --accent-green: #0284c7;
             --text-primary: rgba(255, 255, 255, 0.9);
             --text-secondary: rgba(255, 255, 255, 0.7);
-            --border-color: rgba(255, 255, 255, 0.08);
+            --border-color: rgba(2, 132, 199, 0.22);
         }
 
         body {
-            background: var(--dark-bg);
+            background: linear-gradient(135deg, #5b70a3 0%, #000000 100%) fixed;
+            background-attachment: fixed;
             color: var(--text-primary);
             min-height: 100vh;
             margin: 0;
@@ -160,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .claim-header {
-            background: linear-gradient(135deg, #9B0090 0%, #0B5CAD 100%);
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
             border-radius: 12px;
             padding: 40px 24px;
             margin-bottom: 24px;

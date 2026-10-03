@@ -118,15 +118,15 @@ if (isLoggedIn()) {
             border-radius: 8px;
             padding: 12px;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
             color: white;
-            box-shadow: 0 4px 15px rgba(155, 0, 144, 0.3);
+            /* box-shadow: 0 4px 15px rgba(155, 0, 144, 0.3); */
         }
 
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(155, 0, 144, 0.45);
-            background: linear-gradient(135deg, #b300a7 0%, #0d6ecc 100%);
+            /* box-shadow: 0 8px 25px rgba(155, 0, 144, 0.45); */
+            background: linear-gradient(135deg, #000000 0%, #113c66 100%);
         }
 
         .remember-me {
@@ -180,7 +180,7 @@ if (isLoggedIn()) {
         }
 
         .position-relative i:hover {
-            color: #ffffff;
+            color: #322929;
         }
 
         @media (max-width: 480px) {
@@ -222,7 +222,7 @@ if (isLoggedIn()) {
                 <div class="position-relative">
                     <input type="password"  style="text-transform:none;" class="form-control" id="password" name="password"
                         placeholder="Enter your password" required>
-                    <i class="fas fa-eye position-absolute" style="right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;"
+                    <i class="fas fa-eye-slash position-absolute" style="right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;"
                         onclick="togglePassword()"></i>
                 </div>
             </div>
