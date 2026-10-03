@@ -46,7 +46,7 @@ if (isset($_GET['delete']) && $_GET['delete'] !== '') {
         $stmt = $conn->prepare("DELETE FROM KYC WHERE UserID = ? AND UserType = 'Customer'");
         $stmt->execute([$customerId]);
 
-        $stmt = $conn->prepare("DELETE FROM paymentqr WHERE CustomerID = ?");
+        $stmt = $conn->prepare("DELETE FROM PaymentQR WHERE CustomerID = ?");
         $stmt->execute([$customerId]);
 
         // Now delete the customer

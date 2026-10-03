@@ -57,7 +57,7 @@ $parentPromoterID = null;
 if (!empty($promoter['ParentPromoterID'])) {
     try {
         // Simple query to get parent promoter by PromoterUniqueID
-        $stmt = $conn->prepare("SELECT * FROM promoters WHERE PromoterUniqueID = ?");
+        $stmt = $conn->prepare("SELECT * FROM Promoters WHERE PromoterUniqueID = ?");
         $stmt->execute([$promoter['ParentPromoterID']]);
         $parentPromoter = $stmt->fetch(PDO::FETCH_ASSOC);
 
