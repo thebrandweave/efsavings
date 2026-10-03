@@ -295,7 +295,7 @@
               "text": "Visit website",
               "url": "https://goldendream.in/{{1}}",
               "example": [
-                "https://lb.liyasgoldsavings.in/la"
+                "https://liyasfesavings.in/la"
               ]
             }
           ]

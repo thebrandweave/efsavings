@@ -356,7 +356,7 @@ include("../../components/topbar.php");
                 </h2>
                 <div class="form-group">
                     <label>Webhook Callback URL</label>
-                    <input type="text" class="form-control" value="https://lb.liyasgoldsavings.in/api/whatsapp_webhook.php" readonly style="background-color: #f8f9fa;">
+                    <input type="text" class="form-control" value="https://liyasfesavings.in/api/whatsapp_webhook.php" readonly style="background-color: #f8f9fa;">
                     <p class="help-text">Paste this URL into Meta Developer Console $\rightarrow$ <strong>WhatsApp</strong> $\rightarrow$ <strong>Configuration</strong> $\rightarrow$ <strong>Edit Webhook</strong>.</p>
                 </div>
                 <div class="form-group">
@@ -505,4 +505,4 @@ include("../../components/topbar.php");
     </script>
 </body>
 
-</html>
+</html>

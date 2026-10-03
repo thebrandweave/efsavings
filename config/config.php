@@ -10,7 +10,7 @@ class Database
     public $conn;
 
     // Base URL configuration
-    public static $baseUrl = "https://lb.liyasgoldsavings.in/";
+    public static $baseUrl = "https://liyasfesavings.in/";
 
     public function getConnection()
     {
@@ -28,8 +28,8 @@ class Database
             $this->password = "";
         } else {
             $this->host = "localhost";
-            $this->db_name = "u232955123_LB_DB";
-            $this->username = "u232955123_LB_DB";
+            $this->db_name = "u232955123_efsavings";
+            $this->username = "u232955123_efsavings";
             $this->password = "Brandweave@24";
         }
 
