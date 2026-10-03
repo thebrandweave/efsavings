@@ -775,7 +775,7 @@ if (file_exists($logoPath)) {
 
             <!-- Disclaimer -->
             <div class="receipt-disclaimer">
-                Sheshashayi Complex, Seebinakere, Sagara Road, Thirthahalli, Karnataka | Ph: +91 99951 94472 | Email: info@efsavings.in<br>
+                Sheshashayi Complex, Seebinakere, Sagara Road, Thirthahalli, Karnataka | Ph: +91 88678 44051 | Email: liyasfurnitureandelectronics@gmail.com<br>
                 This document is a computer-verified payment receipt issued towards Liya's Furniture & Electronics Monthly Savings Scheme. Valid upon official seal.
             </div>
         </div>

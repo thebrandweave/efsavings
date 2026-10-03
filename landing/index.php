@@ -56,8 +56,8 @@
             "postalCode": "574153",
             "addressCountry": "IN"
         },
-        "telephone": "+91-99951-94472",
-        "email": "info@efsavings.in"
+        "telephone": "+91-88678-44051",
+        "email": "liyasfurnitureandelectronics@gmail.com"
     }
     </script>
 

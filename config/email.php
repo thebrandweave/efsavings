@@ -64,10 +64,12 @@ function sendSMTPMail($to, $subject, $bodyHTML) {
         $readResponse($socket, 354);
 
         // Build Email Headers
+        $replyTo = !empty(EmailConfig::$replyTo) ? EmailConfig::$replyTo : "liyasfurnitureandelectronics@gmail.com";
         $headers = [
             "MIME-Version: 1.0",
             "Content-Type: text/html; charset=UTF-8",
             "From: =?UTF-8?B?" . base64_encode($fromName) . "?= <$fromEmail>",
+            "Reply-To: <$replyTo>",
             "To: <$to>",
             "Subject: =?UTF-8?B?" . base64_encode($subject) . "?=",
             "Date: " . date('r'),

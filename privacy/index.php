@@ -182,12 +182,13 @@
                 <h2>9. Contact</h2>
                 <div class="contact">
                     For privacy-related questions, contact us at:
-                    <a href="mailto:support@lb.liyasgoldsavings.in">support@lb.liyasgoldsavings.in</a>
+                    <a href="mailto:liyasfurnitureandelectronics@gmail.com">liyasfurnitureandelectronics@gmail.com</a>
+                    or call us at: <a href="tel:+918867844051">+91 88678 44051</a>
                 </div>
             </div>
 
             <div class="footer-note">
-                Liyas Gold Savings &copy; <?php echo date('Y'); ?>. All rights reserved.
+                Liya's Furniture & Electronics &copy; <?php echo date('Y'); ?>. All rights reserved.
             </div>
         </div>
     </div>

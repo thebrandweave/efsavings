@@ -280,12 +280,12 @@ if (strpos($scriptDir, '/shop') !== false) {
                 </div>
                 <div class="contact-item">
                     <i class="fas fa-phone-alt"></i>
-                    <span>+91 97411 27257</span>
+                    <span><a href="tel:+918867844051" style="color: inherit; text-decoration: none;">+91 88678 44051</a></span>
                 </div>
-                <!-- <div class="contact-item">
+                <div class="contact-item">
                     <i class="fas fa-envelope"></i>
-                    <span>info@efsavings.in</span>
-                </div> -->
+                    <span><a href="mailto:liyasfurnitureandelectronics@gmail.com" style="color: inherit; text-decoration: none;">liyasfurnitureandelectronics@gmail.com</a></span>
+                </div>
                 <div class="contact-item">
                     <i class="fas fa-clock"></i>
                     <span>Monday - Sunday: 9:30 AM - 8:00 PM</span>

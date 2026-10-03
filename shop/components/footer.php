@@ -63,8 +63,12 @@ if ($shop_pos !== false) {
           <span>2-108/C-7, Sheshashayi Complex, Seebinakere, Sagara Road, Thirthahalli, Karnataka, Bantwal- 574153</span>
         </div>
         <div class="contact-item">
+          <i class="bi bi-telephone"></i>
+          <span><a href="tel:+918867844051" style="color: inherit; text-decoration: none;">+91 88678 44051</a></span>
+        </div>
+        <div class="contact-item">
           <i class="bi bi-envelope"></i>
-          <span>goldendream175@gmail.com</span>
+          <span><a href="mailto:liyasfurnitureandelectronics@gmail.com" style="color: inherit; text-decoration: none;">liyasfurnitureandelectronics@gmail.com</a></span>
         </div>
       </div>
       

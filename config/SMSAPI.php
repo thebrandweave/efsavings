@@ -365,8 +365,8 @@ class SMSAPI
 
         try {
             // Test with a simple message
-            $testMessage = "Test message from Liyas Gold Savings SMS API";
-            return $this->sendSMS('8197458962', $testMessage);
+            $testMessage = "Test message from Liya's Furniture & Electronics SMS API";
+            return $this->sendSMS('8867844051', $testMessage);
         } catch (Exception $e) {
             return ['success' => false, 'message' => $e->getMessage()];
         }

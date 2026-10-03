@@ -42,18 +42,19 @@ if (isset($_POST['generate_letter'])) {
         <div class="letter-container">
             <div class="letter-header">
                 <img src="../../assets/images/logo.png" class="letter-logo">
-                <h1>Welcome to Liyas Gold Savingss</h1>
+                <h1>Welcome to Liya\'s Furniture & Electronics</h1>
             </div>
             <div class="letter-content">
                 <p>Dear ' . htmlspecialchars($promoter['Name']) . ',</p>
-                <p>We are pleased to welcome you to Liyas Gold Savingss as a Promoter. Your unique ID is: ' . htmlspecialchars($promoter['PromoterUniqueID']) . '</p>
-                <p>As a valued member of our team, you are now part of a community dedicated to helping people achieve their financial dreams.</p>
+                <p>We are pleased to welcome you to Liya\'s Furniture & Electronics as an authorized Promoter. Your unique ID is: ' . htmlspecialchars($promoter['PromoterUniqueID']) . '</p>
+                <p>As a valued member of our team, you are now part of a community dedicated to helping people save smartly for luxury furniture, electronics, and home upgrades.</p>
                 <p>Your journey with us begins today, and we are committed to supporting your success every step of the way.</p>
                 <div class="letter-signature">
-                    <p>Best regards,<br>Liyas Gold Savingss Team</p>
+                    <p>Best regards,<br>Liya\'s Furniture & Electronics Team</p>
                 </div>
             </div>
             <div class="letter-footer">
+                <p>Support: +91 88678 44051 | Email: liyasfurnitureandelectronics@gmail.com</p>
                 <p>This is a computer-generated document. No signature is required.</p>
                 <p>Generated on: ' . date('d M Y') . '</p>
             </div>
@@ -81,7 +82,7 @@ if (isset($_POST['generate_letter'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Letter | Liyas Gold Savingss</title>
+    <title>Welcome Letter | Liya's Furniture & Electronics</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -347,12 +348,14 @@ if (isset($_POST['generate_letter'])) {
            
                 <div class="info-section">
                     <h3>About Your Welcome Letter</h3>
-                    <p>Your welcome letter is an official document that confirms your association with Liyas Gold Savingss.</p>
+                    <p>Your welcome letter is an official document that confirms your association with Liya's Furniture & Electronics.</p>
                     
                     <h3>What's Included in Your Welcome Letter?</h3>
                     <ul>
                         <li>Your unique Promoter ID</li>
-                        <li>Official welcome message from Liyas Gold Savingss</li>
+                        <li>Official welcome message from Liya's Furniture & Electronics</li>
+                        <li>Official Support Helpline: <strong>+91 88678 44051</strong></li>
+                        <li>Support Email: <strong>liyasfurnitureandelectronics@gmail.com</strong></li>
                         <li>Date of generation</li>
                         <li>Digital signature</li>
                     </ul>
@@ -360,7 +363,7 @@ if (isset($_POST['generate_letter'])) {
                     <h3>How to Use Your Welcome Letter</h3>
                     <ul>
                         <li>Keep it for your records</li>
-                        <li>Use it as proof of your association with Liyas Gold Savingss</li>
+                        <li>Use it as proof of your association with Liya's Furniture & Electronics</li>
                         <li>Share it with potential customers when needed</li>
                     </ul>
                 </div>

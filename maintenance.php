@@ -288,11 +288,11 @@ background: linear-gradient(to right, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, F
             <div class="contact-info">
                 <div class="contact-item">
                     <i class="fas fa-envelope"></i>
-                    <span>goldendream175@gmail.com</span>
+                    <span><a href="mailto:liyasfurnitureandelectronics@gmail.com" style="color: inherit; text-decoration: none;">liyasfurnitureandelectronics@gmail.com</a></span>
                 </div>
                 <div class="contact-item">
                     <i class="fas fa-phone"></i>
-                    <span>+91 73497 39580</span>
+                    <span><a href="tel:+918867844051" style="color: inherit; text-decoration: none;">+91 88678 44051</a></span>
                 </div>
             </div>
             

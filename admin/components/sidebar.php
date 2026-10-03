@@ -540,6 +540,12 @@ include(__DIR__ . "/delete_undo.php");
                     </a>
                 </li>
             <?php endif; ?>
+            <li>
+                <a href="mailto:liyasfurnitureandelectronics@gmail.com" data-title="Support Helpdesk">
+                    <i class="fas fa-headset"></i>
+                    <span class="link-text">Help & Support</span>
+                </a>
+            </li>
             <li class="<?php echo ($currentPage == 'Logout') ? 'active' : ''; ?>">
                 <a href="<?php echo $menuPath; ?>logout.php" data-title="Logout">
                     <i class="fas fa-sign-out-alt"></i>

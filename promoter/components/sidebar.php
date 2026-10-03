@@ -534,6 +534,12 @@
                 <span class="link-text">My Profile</span>
             </a>
         </li>
+        <li>
+            <a href="https://wa.me/918867844051?text=Hello%20Liyas%20Support,%20I%20am%20a%20Promoter%20and%20need%20assistance" target="_blank" data-title="Help & Support">
+                <i class="fas fa-headset"></i>
+                <span class="link-text">Help & Support</span>
+            </a>
+        </li>
         <!--         
         <li class="<?php echo ($currentPage == 'settings') ? 'active' : ''; ?>">
             <a href="<?php echo $menuPath; ?>settings" data-title="Settings">

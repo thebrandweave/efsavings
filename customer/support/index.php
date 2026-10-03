@@ -461,7 +461,7 @@ try {
         <!-- Direct Contact Channels -->
         <div class="channels-grid">
             <!-- WhatsApp -->
-            <a href="https://wa.me/919995194472?text=Hello%20Liyas%20Customer%20Support,%20I%20need%20help%20with%20my%20account" target="_blank" class="channel-card">
+            <a href="https://wa.me/918867844051?text=Hello%20Liyas%20Customer%20Support,%20I%20need%20help%20with%20my%20account" target="_blank" class="channel-card">
                 <div class="channel-icon-wrap whatsapp">
                     <i class="fab fa-whatsapp"></i>
                 </div>
@@ -473,24 +473,24 @@ try {
             </a>
 
             <!-- Phone Helpline -->
-            <a href="tel:+919995194472" class="channel-card">
+            <a href="tel:+918867844051" class="channel-card">
                 <div class="channel-icon-wrap phone">
                     <i class="fas fa-phone"></i>
                 </div>
                 <div class="channel-title">Phone Helpline</div>
-                <div class="channel-val">+91 99951 94472<br>+91 81057 53472</div>
+                <div class="channel-val">+91 88678 44051</div>
                 <div class="channel-badge btn-call">
                     <i class="fas fa-headset"></i> Call Support &rarr;
                 </div>
             </a>
 
             <!-- Email Support -->
-            <a href="mailto:info@efsavings.in" class="channel-card">
+            <a href="mailto:liyasfurnitureandelectronics@gmail.com" class="channel-card">
                 <div class="channel-icon-wrap email">
                     <i class="fas fa-envelope"></i>
                 </div>
                 <div class="channel-title">Email Desk</div>
-                <div class="channel-val">info@efsavings.in</div>
+                <div class="channel-val">liyasfurnitureandelectronics@gmail.com</div>
                 <div class="channel-badge" style="color: #fbbf24;">
                     <i class="fas fa-reply"></i> Send Email &rarr;
                 </div>

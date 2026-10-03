@@ -843,11 +843,11 @@ require_once __DIR__ . '/../config/config.php';
             <div class="contact-info-list">
                 <div>
                     <label>Phone:</label>
-                    <span>+91 8197458962</span>
+                    <span><a href="tel:+918867844051" style="color: inherit; text-decoration: none;">+91 88678 44051</a></span>
                 </div>
                 <div>
                     <label>Email:</label>
-                    <span>goldendream175@gmail.com</span>
+                    <span><a href="mailto:liyasfurnitureandelectronics@gmail.com" style="color: inherit; text-decoration: none;">liyasfurnitureandelectronics@gmail.com</a></span>
                 </div>
                 <div>
                     <label>Address:</label>

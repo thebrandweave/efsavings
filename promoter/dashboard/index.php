@@ -1392,6 +1392,17 @@ $currentPage = 'dashboard';
                             <a href="../profile/" class="view-profile-btn">View Full Profile</a>
                         </div>
                     </div>
+                    <div style="margin-top: 15px; padding: 12px 14px; background: rgba(11, 92, 173, 0.08); border: 1px solid rgba(11, 92, 173, 0.2); border-radius: 10px; font-size: 13px;">
+                        <div style="font-weight: 600; color: #0B5CAD; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                            <i class="fas fa-headset"></i> Promoter Support Desk
+                        </div>
+                        <div style="color: #475569; margin-bottom: 4px;">
+                            <i class="fas fa-phone me-1"></i> <a href="tel:+918867844051" style="color: inherit; text-decoration: none; font-weight: 500;">+91 88678 44051</a>
+                        </div>
+                        <div style="color: #475569;">
+                            <i class="fas fa-envelope me-1"></i> <a href="mailto:liyasfurnitureandelectronics@gmail.com" style="color: inherit; text-decoration: none; font-weight: 500;">liyasfurnitureandelectronics@gmail.com</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 

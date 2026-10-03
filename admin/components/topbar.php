@@ -390,6 +390,10 @@
             <i class="fas fa-history"></i>
         </a>
 
+        <a href="mailto:liyasfurnitureandelectronics@gmail.com" class="action-icon" title="Helpdesk: liyasfurnitureandelectronics@gmail.com / +91 88678 44051">
+            <i class="fas fa-headset"></i>
+        </a>
+
         <div class="user-profile">
             <?php
             // Get admin info from session
@@ -430,6 +434,9 @@
                 </a>
                 <a href="<?php echo $menuPath; ?>settings/" class="dropdown-item">
                     <i class="fas fa-cog"></i> Settings
+                </a>
+                <a href="mailto:liyasfurnitureandelectronics@gmail.com" class="dropdown-item" title="Call: +91 88678 44051">
+                    <i class="fas fa-headset"></i> Help & Support
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="<?php echo $menuPath; ?>logout.php" class="dropdown-item logout-item">

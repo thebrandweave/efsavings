@@ -14,8 +14,8 @@ $current_path = $_SERVER['SCRIPT_NAME'];
 <!-- Top Info Bar -->
 <div class="topbar">
   <div class="topbar-left">
-    <span>+91 8105753472</span>
-    <span>goldendream175@gmail.com</span>
+    <span><a href="tel:+918867844051" style="color: inherit; text-decoration: none;">+91 88678 44051</a></span>
+    <span><a href="mailto:liyasfurnitureandelectronics@gmail.com" style="color: inherit; text-decoration: none;">liyasfurnitureandelectronics@gmail.com</a></span>
   </div>
   <div class="topbar-right">
     <a href="<?php echo $shop_base; ?>contact/index.php">Contact Us</a>
