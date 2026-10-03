@@ -18,8 +18,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: rgba(7, 18, 32, 0.6);
-        backdrop-filter: blur(4px);
+        background: radial-gradient(circle at center, rgba(15, 34, 64, 0.78) 0%, rgba(10, 22, 44, 0.85) 100%);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
         z-index: 999999;
         opacity: 1;
         visibility: visible;
@@ -50,22 +51,22 @@
     }
 
     .circle:nth-child(1) {
-        stroke: #0284C7;
+        stroke: #38bdf8;
         animation-delay: 0s;
     }
 
     .circle:nth-child(2) {
-        stroke: #F59E0B;
+        stroke: #0284c7;
         animation-delay: 0.3s;
     }
 
     .circle:nth-child(3) {
-        stroke: #0284C7;
+        stroke: #60a5fa;
         animation-delay: 0.6s;
     }
 
     .circle:nth-child(4) {
-        stroke: #F59E0B;
+        stroke: #0369a1;
         animation-delay: 0.9s;
     }
 

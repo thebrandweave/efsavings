@@ -1,14 +1,28 @@
 <?php
 session_start();
+$menuPath = "../";
 require_once("../../config/config.php");
+require_once("../../config/JWT.php");
 
-// Verify admin session
+// Verify admin session or JWT token
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: ../login.php");
-    exit();
+    if (isset($_COOKIE['admin_token'])) {
+        $decoded = JWTManager::verifyToken($_COOKIE['admin_token']);
+        if ($decoded && isset($decoded->admin_id)) {
+            $_SESSION['admin_id'] = $decoded->admin_id;
+            $_SESSION['admin_email'] = $decoded->email ?? '';
+            $_SESSION['admin_role'] = $decoded->role ?? '';
+        } else {
+            header("Location: ../login.php");
+            exit();
+        }
+    } else {
+        header("Location: ../login.php");
+        exit();
+    }
 }
 
-if (!isset($_GET['id']) || empty($_GET['id'])) {
+if (!isset($_GET['id']) || empty($_GET['id']) || !is_numeric($_GET['id'])) {
     echo "<div style='font-family: sans-serif; text-align: center; padding: 50px;'>Payment ID is required. <a href='index.php'>Back to Payments</a></div>";
     exit();
 }
@@ -42,7 +56,7 @@ try {
 
     $backUrl = 'index.php';
     include("../../components/receipt_voucher.php");
-} catch (Exception $e) {
-    echo "<div style='font-family: sans-serif; text-align: center; padding: 50px;'>Error loading receipt: " . htmlspecialchars($e->getMessage()) . "</div>";
+} catch (Throwable $e) {
+    echo "<div style='font-family: sans-serif; text-align: center; padding: 50px;'>Error loading receipt: " . htmlspecialchars($e->getMessage()) . " <a href='index.php'>Back to Payments</a></div>";
     exit();
 }

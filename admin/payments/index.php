@@ -1,9 +1,9 @@
 <?php
 session_start();
-// require_once("../middleware/auth.php");
-// verifyAuth();
-
 $menuPath = "../";
+require_once("../middleware/auth.php");
+verifyAuth();
+
 $currentPage = "payments";
 require_once("./clearSession.php");
 require_once("../../config/config.php");
@@ -1244,7 +1244,10 @@ include("../components/topbar.php");
                     </div>
                     <?php endif; ?>
                   </div>
-                  <div class="modal-footer" style="background: #f8f9fa; border-top: 1px solid #eee; padding: 12px 24px;">
+                  <div class="modal-footer" style="background: #f8f9fa; border-top: 1px solid #eee; padding: 12px 24px; display: flex; justify-content: flex-end; gap: 10px;">
+                    <a href="receipt.php?id=<?php echo htmlspecialchars($popupData['payment_id']); ?>" target="_blank" class="btn btn-primary px-3" style="border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #9B0090, #0B5CAD); border: none; text-decoration: none; color: white;">
+                      <i class="fas fa-file-invoice"></i> View Official Receipt
+                    </a>
                     <button type="button" class="btn btn-success px-4" style="border-radius: 8px; font-weight: 600;" onclick="document.getElementById('commissionSuccessModal').remove()">OK / Close</button>
                   </div>
                 </div>
