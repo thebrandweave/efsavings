@@ -480,7 +480,7 @@ include("../components/topbar.php");
                 </div>
             </div>
 
-            <div class="form-section">
+            <!-- <div class="form-section">
                 <div class="section-title">Team & Commission</div>
 
                 <div class="checkbox-group">
@@ -532,7 +532,7 @@ include("../components/topbar.php");
                         <small class="text-muted">Must be less than parent promoter's commission</small>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="form-section">
                 <div class="section-title">Bank Details</div>
