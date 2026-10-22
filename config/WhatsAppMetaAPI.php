@@ -52,13 +52,33 @@ class WhatsAppMetaAPI
 
     private function loadConfig()
     {
+        $defaultConfig = [
+            'APIProviderName' => 'Meta Cloud API',
+            'APIEndpoint' => 'https://graph.facebook.com/v25.0',
+            'AccessToken' => 'EAAZA2al01AnABS23IU4FLqDRgdaivu21RXpEVRLPC1AHrmnNzswOuHpl0XEWZAV1g93XWcniF7OtppdwC3ZC1LzkMTjPsNVsz4wK72WdOzDGgSvPxgwvy7HfexTUZC429rC0vp99rdxaViEDdOLBbPGhbOSzJn07YWLMlgoagJi691zZA8q3OiQjNNY5OFRP4SM92GFE6iSkV0v6a0b7VVZCZCg4cVL13aZBkZAvUBhZC0FmuGM3C5MWGpQdaYOY0Kn31kZBE8Ih25gZBxSZA7ja104sSdMlt30PmoCaBSxdEiy9k',
+            'PhoneNumberID' => '1070628026144175',
+            'DefaultTemplateName' => 'hello_world',
+            'TemplateLanguageCode' => 'en_US',
+            'Status' => 'Active'
+        ];
+
+        if (!$this->conn) {
+            $this->config = $defaultConfig;
+            return;
+        }
+
         try {
             $stmt = $this->conn->prepare("SELECT * FROM WhatsAppAPIConfig WHERE Status = 'Active' ORDER BY ConfigID DESC LIMIT 1");
             $stmt->execute();
-            $this->config = $stmt->fetch(PDO::FETCH_ASSOC);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($row && !empty($row['PhoneNumberID']) && ($row['APIProviderName'] ?? '') === 'Meta Cloud API') {
+                $this->config = $row;
+            } else {
+                $this->config = $defaultConfig;
+            }
         } catch (PDOException $e) {
             error_log("Error loading WhatsApp Meta config: " . $e->getMessage());
-            $this->config = null;
+            $this->config = $defaultConfig;
         }
     }
 

@@ -20,6 +20,12 @@ class NotificationService
     private function getChannels()
     {
         try {
+            $this->conn->exec("CREATE TABLE IF NOT EXISTS NotificationChannelSettings (
+                SettingID INT AUTO_INCREMENT PRIMARY KEY,
+                IsSMSEnabled TINYINT(1) NOT NULL DEFAULT 1,
+                IsWhatsAppEnabled TINYINT(1) NOT NULL DEFAULT 1,
+                UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )");
             $stmt = $this->conn->query("SELECT IsSMSEnabled, IsWhatsAppEnabled FROM NotificationChannelSettings ORDER BY SettingID DESC LIMIT 1");
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             if (!$row) {

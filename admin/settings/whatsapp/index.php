@@ -23,30 +23,52 @@ $conn = $database->getConnection();
 
 // Get current settings
 try {
-    // Ensure VerifyToken column exists in database table
-    $stmt = $conn->query("SHOW COLUMNS FROM WhatsAppAPIConfig LIKE 'VerifyToken'");
-    if (!$stmt->fetch()) {
-        $conn->exec("ALTER TABLE WhatsAppAPIConfig ADD COLUMN VerifyToken VARCHAR(255) DEFAULT 'liyas_whatsapp_verify_token_2026'");
+    // Ensure required Meta Cloud API columns exist in database table
+    $requiredColumns = [
+        'PhoneNumberID' => "VARCHAR(100) NULL AFTER InstanceID",
+        'DefaultTemplateName' => "VARCHAR(120) NOT NULL DEFAULT 'hello_world' AFTER PhoneNumberID",
+        'TemplateLanguageCode' => "VARCHAR(20) NOT NULL DEFAULT 'en_US' AFTER DefaultTemplateName",
+        'VerifyToken' => "VARCHAR(255) DEFAULT 'liyas_whatsapp_verify_token_2026'"
+    ];
+    foreach ($requiredColumns as $colName => $colDef) {
+        $stmt = $conn->query("SHOW COLUMNS FROM WhatsAppAPIConfig LIKE '$colName'");
+        if (!$stmt->fetch()) {
+            $conn->exec("ALTER TABLE WhatsAppAPIConfig ADD COLUMN $colName $colDef");
+        }
     }
 
     $stmt = $conn->query("SELECT * FROM WhatsAppAPIConfig ORDER BY ConfigID DESC LIMIT 1");
     $settings = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $defaultToken = 'EAAZA2al01AnABS23IU4FLqDRgdaivu21RXpEVRLPC1AHrmnNzswOuHpl0XEWZAV1g93XWcniF7OtppdwC3ZC1LzkMTjPsNVsz4wK72WdOzDGgSvPxgwvy7HfexTUZC429rC0vp99rdxaViEDdOLBbPGhbOSzJn07YWLMlgoagJi691zZA8q3OiQjNNY5OFRP4SM92GFE6iSkV0v6a0b7VVZCZCg4cVL13aZBkZAvUBhZC0FmuGM3C5MWGpQdaYOY0Kn31kZBE8Ih25gZBxSZA7ja104sSdMlt30PmoCaBSxdEiy9k';
+    $defaultPhoneId = '1070628026144175';
+
     // If no settings exist, create a default record
     if (!$settings) {
-        $stmt = $conn->prepare("INSERT INTO WhatsAppAPIConfig (APIProviderName, APIEndpoint, AccessToken, Token, InstanceID, PhoneNumberID, DefaultTemplateName, TemplateLanguageCode, VerifyToken, Status) VALUES ('Meta Cloud API', 'https://graph.facebook.com/v25.0', '', '', '', '', 'hello_world', 'en_US', 'liyas_whatsapp_verify_token_2026', 'Active')");
-        $stmt->execute();
+        $stmt = $conn->prepare("INSERT INTO WhatsAppAPIConfig (APIProviderName, APIEndpoint, AccessToken, Token, InstanceID, PhoneNumberID, DefaultTemplateName, TemplateLanguageCode, VerifyToken, Status) VALUES ('Meta Cloud API', 'https://graph.facebook.com/v25.0', ?, '', '876847478188465', ?, 'hello_world', 'en_US', 'liyas_whatsapp_verify_token_2026', 'Active')");
+        $stmt->execute([$defaultToken, $defaultPhoneId]);
         $settings = [
             'ConfigID' => $conn->lastInsertId(),
             'APIProviderName' => 'Meta Cloud API',
             'APIEndpoint' => 'https://graph.facebook.com/v25.0',
-            'AccessToken' => '',
-            'PhoneNumberID' => '',
+            'AccessToken' => $defaultToken,
+            'PhoneNumberID' => $defaultPhoneId,
             'DefaultTemplateName' => 'hello_world',
             'TemplateLanguageCode' => 'en_US',
             'VerifyToken' => 'liyas_whatsapp_verify_token_2026',
             'Status' => 'Active'
         ];
+    } elseif (empty($settings['PhoneNumberID']) || ($settings['APIProviderName'] ?? '') !== 'Meta Cloud API') {
+        $stmt = $conn->prepare("UPDATE WhatsAppAPIConfig SET APIProviderName = 'Meta Cloud API', APIEndpoint = 'https://graph.facebook.com/v25.0', AccessToken = ?, InstanceID = '876847478188465', PhoneNumberID = ?, DefaultTemplateName = 'hello_world', TemplateLanguageCode = 'en_US', VerifyToken = 'liyas_whatsapp_verify_token_2026', Status = 'Active' WHERE ConfigID = ?");
+        $stmt->execute([$defaultToken, $defaultPhoneId, $settings['ConfigID']]);
+        $settings['APIProviderName'] = 'Meta Cloud API';
+        $settings['APIEndpoint'] = 'https://graph.facebook.com/v25.0';
+        $settings['AccessToken'] = $defaultToken;
+        $settings['PhoneNumberID'] = $defaultPhoneId;
+        $settings['DefaultTemplateName'] = 'hello_world';
+        $settings['TemplateLanguageCode'] = 'en_US';
+        $settings['VerifyToken'] = 'liyas_whatsapp_verify_token_2026';
+        $settings['Status'] = 'Active';
     }
 } catch (PDOException $e) {
     $_SESSION['error_message'] = "Failed to fetch settings: " . $e->getMessage();

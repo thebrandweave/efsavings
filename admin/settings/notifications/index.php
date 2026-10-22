@@ -18,6 +18,12 @@ $database = new Database();
 $conn = $database->getConnection();
 
 try {
+    $conn->exec("CREATE TABLE IF NOT EXISTS NotificationChannelSettings (
+        SettingID INT AUTO_INCREMENT PRIMARY KEY,
+        IsSMSEnabled TINYINT(1) NOT NULL DEFAULT 1,
+        IsWhatsAppEnabled TINYINT(1) NOT NULL DEFAULT 1,
+        UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )");
     $stmt = $conn->query("SELECT * FROM NotificationChannelSettings ORDER BY SettingID DESC LIMIT 1");
     $settings = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$settings) {
