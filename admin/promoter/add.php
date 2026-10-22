@@ -480,59 +480,7 @@ include("../components/topbar.php");
                 </div>
             </div>
 
-            <!-- <div class="form-section">
-                <div class="section-title">Team & Commission</div>
-
-                <div class="checkbox-group">
-                    <input type="checkbox" id="is_new_team" name="is_new_team"
-                        <?php echo (isset($_POST['is_new_team'])) ? 'checked' : ''; ?>>
-                    <label for="is_new_team">Add as New Team</label>
-                </div>
-
-                <div id="new_team_section" class="conditional-field <?php echo (isset($_POST['is_new_team'])) ? 'active' : ''; ?>">
-                    <div class="form-group">
-                        <label for="new_team_name">Team Name *</label>
-                        <input type="text" id="new_team_name" name="new_team_name" class="form-control"
-                            value="<?php echo isset($_POST['new_team_name']) ? htmlspecialchars($_POST['new_team_name']) : ''; ?>">
-                    </div>
-                </div>
-
-                <div id="parent_promoter_section" class="conditional-field <?php echo (!isset($_POST['is_new_team'])) ? 'active' : ''; ?>">
-                    <div class="form-group">
-                        <label for="parent_promoter_id">Parent Promoter *</label>
-                        <div class="custom-select-wrapper">
-                            <div class="custom-select-header" onclick="toggleSelect()">
-                                <span id="selected-value">Select Parent Promoter</span>
-                                <i class="fas fa-chevron-down"></i>
-                            </div>
-                            <div class="custom-select-dropdown" id="custom-select-dropdown">
-                                <div class="search-box">
-                                    <input type="text" id="parent_promoter_search" placeholder="Search promoter..." onkeyup="filterOptions()">
-                                    <i class="fas fa-search"></i>
-                                </div>
-                                <div class="options-container" id="options-container">
-                                    <?php foreach ($parentPromoters as $promoter): ?>
-                                        <div class="option"
-                                            data-value="<?php echo htmlspecialchars($promoter['PromoterUniqueID']); ?>"
-                                            data-commission="<?php echo htmlspecialchars($promoter['Commission']); ?>"
-                                            onclick="selectOption(this)">
-                                            <?php echo htmlspecialchars($promoter['Name'] . ' (' . $promoter['PromoterUniqueID'] . ')'); ?>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                            <input type="hidden" id="parent_promoter_id" name="parent_promoter_id" value="<?php echo isset($_POST['parent_promoter_id']) ? htmlspecialchars($_POST['parent_promoter_id']) : ''; ?>">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="commission">Commission *</label>
-                        <input type="number" id="commission" name="commission" class="form-control" min="0"
-                            value="<?php echo isset($_POST['commission']) ? htmlspecialchars($_POST['commission']) : '200'; ?>">
-                        <small class="text-muted">Must be less than parent promoter's commission</small>
-                    </div>
-                </div>
-            </div> -->
+        
 
             <div class="form-section">
                 <div class="section-title">Bank Details</div>
