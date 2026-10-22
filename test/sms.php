@@ -9,7 +9,7 @@ $password = "jx0NgVQjBT";
 $data = [
     "customerId" => $customerId,
     "destinationAddress" => ["916362514956"],
-    "message" => "Dear Ajlan, welcome to PROGEEDEE Ventures Private Limited. You have successfully registered for the Golden Dream Savings Plan. Your Customer ID is 12345. Visit https://goldendream.in/ for more details.",
+    "message" => "Dear Mufeeztest, welcome to PROGEEDEE Ventures Private Limited. You have successfully registered for the Electronics and Furniture Savings Plan. Your Customer ID is 12345. Visit https://goldendream.in/ for more details.",
     "sourceAddress" => "PGDVNT",
     "messageType" => "SERVICE_IMPLICIT",
     "dltTemplateId" => "1077445000020819206",
@@ -26,12 +26,18 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Authorization: Basic " . base64_encode($username . ":" . $password)
 ]);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
 $response = curl_exec($ch);
 
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$curlError = curl_error($ch);
 
 echo "HTTP Status: " . $httpCode . "\n";
+if ($curlError) {
+    echo "cURL Error: " . $curlError . "\n";
+}
 echo $response;
 
 curl_close($ch);
