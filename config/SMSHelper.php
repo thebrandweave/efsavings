@@ -11,10 +11,10 @@ define('SMS_USERNAME', 'f8758d62_260c_404b_8d4a_a15ce94593d4');
 define('SMS_PASSWORD', 'jx0NgVQjBT');
 define('SMS_ENTITY_ID', '1001791223662244844');
 
-// Template ID 1007289085098641045 - Welcome
+// Template ID 1077445000020819206 - Welcome
 // "Dear var, welcome to PROGEEDEE Ventures Private Limited. You have successfully registered for the Golden Dream Savings Plan. Your Customer ID is var. Visit https://goldendream.in/ for more details."
-define('SMS_TEMPLATE_WELCOME_ID', '1007289085098641045');
-define('SMS_SOURCE_WELCOME', 'PGDVTR');
+define('SMS_TEMPLATE_WELCOME_ID', '1077445000020819206');
+define('SMS_SOURCE_WELCOME', 'PGDVNT');
 
 // Template ID 1007000046423973167 - Payment received
 // "Dear var Thank you for choosing PROGEEDEE Ventures Private Limited Golden Dream Savings Plan We have received your payment of Rs var"
@@ -122,10 +122,10 @@ function smsHelperSend($data) {
     $msgKey = isset($data['message']) ? md5((string)$data['message']) : '';
     $dedupKey = $phoneKey . '_' . $msgKey;
 
-    // TRAI 9 PM - 10 AM Time Band Check for SERVICE_EXPLICIT SMS
-    $msgType = strtoupper($data['messageType'] ?? 'SERVICE_EXPLICIT');
-    if ($msgType === 'SERVICE_EXPLICIT' && isSMSTimeBandRestricted()) {
-        error_log("SMSHelper: Suppressed SERVICE_EXPLICIT SMS for {$phoneKey} during 9 PM - 10 AM TRAI restricted window. Routing via WhatsApp fallback.");
+    // TRAI 9 PM - 10 AM Time Band Check for SERVICE_IMPLICIT SMS
+    $msgType = strtoupper($data['messageType'] ?? 'SERVICE_IMPLICIT');
+    if ($msgType === 'SERVICE_IMPLICIT' && isSMSTimeBandRestricted()) {
+        error_log("SMSHelper: Suppressed SERVICE_IMPLICIT SMS for {$phoneKey} during 9 PM - 10 AM TRAI restricted window. Routing via WhatsApp fallback.");
         return [
             'ok' => false,
             'httpCode' => 651,
@@ -185,7 +185,7 @@ function smsHelperPhone($phone) {
 }
 
 /**
- * Welcome SMS (onboarding) - Template 1007289085098641045, PGDVTR
+ * Welcome SMS (onboarding) - Template 1077445000020819206, PGDVNT
  * var1 = customer name, var2 = customer unique ID
  */
 function sendWelcomeSMSHardcoded($phoneNumber, $customerName, $customerUniqueID) {
@@ -205,7 +205,7 @@ function sendWelcomeSMSHardcoded($phoneNumber, $customerName, $customerUniqueID)
         'destinationAddress' => [$phone],
         'message' => $message,
         'sourceAddress' => SMS_SOURCE_WELCOME,
-        'messageType' => 'SERVICE_EXPLICIT',
+        'messageType' => 'SERVICE_IMPLICIT',
         'dltTemplateId' => SMS_TEMPLATE_WELCOME_ID,
         'entityId' => SMS_ENTITY_ID
     ];
@@ -241,7 +241,7 @@ function sendPaymentVerifiedSMSHardcoded($phoneNumber, $customerName, $amount) {
         'destinationAddress' => [$phone],
         'message' => $message,
         'sourceAddress' => SMS_SOURCE_PAYMENT,
-        'messageType' => 'SERVICE_EXPLICIT',
+        'messageType' => 'SERVICE_IMPLICIT',
         'dltTemplateId' => SMS_TEMPLATE_PAYMENT_ID,
         'entityId' => SMS_ENTITY_ID
     ];
@@ -277,7 +277,7 @@ function sendPaymentRejectedSMSHardcoded($phoneNumber, $customerName, $amount, $
         'destinationAddress' => [$phone],
         'message' => $message,
         'sourceAddress' => SMS_SOURCE_PAYMENT,
-        'messageType' => 'SERVICE_EXPLICIT',
+        'messageType' => 'SERVICE_IMPLICIT',
         'dltTemplateId' => SMS_TEMPLATE_PAYMENT_ID,
         'entityId' => SMS_ENTITY_ID
     ];

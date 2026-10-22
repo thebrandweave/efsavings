@@ -28,7 +28,7 @@ try {
 
     // If no settings exist, create a default record
     if (!$settings) {
-        $stmt = $conn->prepare("INSERT INTO SMSAPIConfig (APIProviderName, APIEndpoint, Username, Password, CustomerID, SourceAddress, DLTEntityID, DLTTemplateID, MessageType, MessageTemplate, Status) VALUES ('Airtel', 'https://iqsms.airtel.in/api/v1/send-prepaid-sms', '', '', '', '', '', '', 'SERVICE_EXPLICIT', '', 'Active')");
+        $stmt = $conn->prepare("INSERT INTO SMSAPIConfig (APIProviderName, APIEndpoint, Username, Password, CustomerID, SourceAddress, DLTEntityID, DLTTemplateID, MessageType, MessageTemplate, Status) VALUES ('Airtel', 'https://iqsms.airtel.in/api/v1/send-prepaid-sms', '', '', '', '', '', '', 'SERVICE_IMPLICIT', '', 'Active')");
         $stmt->execute();
         $settings = [
             'ConfigID' => $conn->lastInsertId(),
@@ -40,7 +40,7 @@ try {
             'SourceAddress' => '',
             'DLTEntityID' => '',
             'DLTTemplateID' => '',
-            'MessageType' => 'SERVICE_EXPLICIT',
+            'MessageType' => 'SERVICE_IMPLICIT',
             'MessageTemplate' => '',
             'Status' => 'Active'
         ];
@@ -399,11 +399,11 @@ include("../../components/topbar.php");
                 <div class="form-group">
                     <label for="message_type">Message Type</label>
                     <select id="message_type" name="message_type" class="form-control" required>
-                        <option value="SERVICE_EXPLICIT" <?php echo ($settings['MessageType'] ?? '') === 'SERVICE_EXPLICIT' ? 'selected' : ''; ?>>Service Explicit</option>
+                        <option value="SERVICE_IMPLICIT" <?php echo ($settings['MessageType'] ?? '') === 'SERVICE_IMPLICIT' ? 'selected' : ''; ?>>Service Explicit</option>
                         <option value="text" <?php echo ($settings['MessageType'] ?? '') === 'text' ? 'selected' : ''; ?>>Text</option>
                         <option value="unicode" <?php echo ($settings['MessageType'] ?? '') === 'unicode' ? 'selected' : ''; ?>>Unicode</option>
                     </select>
-                    <p class="help-text">Type of message content (SERVICE_EXPLICIT for DLT templates)</p>
+                    <p class="help-text">Type of message content (SERVICE_IMPLICIT for DLT templates)</p>
                 </div>
 
 

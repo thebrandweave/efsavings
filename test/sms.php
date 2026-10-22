@@ -10,9 +10,9 @@ $data = [
     "customerId" => $customerId,
     "destinationAddress" => ["916362514956"],
     "message" => "Dear Ajlan, welcome to PROGEEDEE Ventures Private Limited. You have successfully registered for the Golden Dream Savings Plan. Your Customer ID is 12345. Visit https://goldendream.in/ for more details.",
-    "sourceAddress" => "PGDVTR",
-    "messageType" => "SERVICE_EXPLICIT",
-    "dltTemplateId" => "1007289085098641045",
+    "sourceAddress" => "PGDVNT",
+    "messageType" => "SERVICE_IMPLICIT",
+    "dltTemplateId" => "1077445000020819206",
     "entityId" => "1001791223662244844"
 ];
 

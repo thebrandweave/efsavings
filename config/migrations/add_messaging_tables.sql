@@ -12,7 +12,7 @@
         SourceAddress VARCHAR(20) NOT NULL,
         DLTEntityID VARCHAR(100) NOT NULL,
         DLTTemplateID VARCHAR(100) NOT NULL,
-        MessageType VARCHAR(20) DEFAULT 'SERVICE_EXPLICIT',
+        MessageType VARCHAR(20) DEFAULT 'SERVICE_IMPLICIT',
         MessageTemplate TEXT,
         Status VARCHAR(20) DEFAULT 'Active',
         CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -59,10 +59,10 @@
         'f8758d62_260c_404b_8d4a_a15ce94593d4',
         'jx0NgVQjBT',
         '72c5ff0d-4624-4972-bc1c-dcef261dd7f7',
-        'PGDVTR',
+        'PGDVNT',
         '1001791223662244844',
-        '1007289085098641045',
-        'SERVICE_EXPLICIT',
-        'Dear {var1}, welcome to PROGEEDEE Ventures Private Limited. You have successfully registered for the Golden Dream Savings Plan. Your Customer ID is {var2}. Visit https://goldendream.in/ for more details.',
+        '1077445000020819206',
+        'SERVICE_IMPLICIT',
+        'Dear {var1}, welcome to PROGEEDEE Ventures Private Limited. You have successfully registered for the Electronics and Furniture Savings Plan. Your Customer ID is {var2}.',
         'Active'
     );

@@ -272,12 +272,12 @@ class SMSAPI
             }
 
             // Welcome template details from screenshot
-            // Template ID: 1007289085098641045
+            // Template ID: 1077445000020819206
             // Template: "Dear var, welcome to PROGEEDEE Ventures Private Limited. You have successfully registered for the Golden Dream Savings Plan. Your Customer ID is var. Visit https://goldendream.in/ for more details."
-            // Source Address: PGDVTR
+            // Source Address: PGDVNT
             // Variables: var1 = Customer Name, var2 = Customer Unique ID
 
-            $welcomeTemplate = "Dear {var1}, welcome to PROGEEDEE Ventures Private Limited. You have successfully registered for the Golden Dream Savings Plan. Your Customer ID is {var2}. Visit https://goldendream.in/ for more details.";
+            $welcomeTemplate = "Dear {var1}, welcome to PROGEEDEE Ventures Private Limited. You have successfully registered for the Electronics and Furniture Savings Plan. Your Customer ID is {var2}.";
 
             if (function_exists('sanitizeCustomerName')) {
                 $customerName = sanitizeCustomerName($customerName);
@@ -291,11 +291,11 @@ class SMSAPI
             $apiData = [
                 'customerId' => $this->config['CustomerID'],
                 'destinationAddress' => [$phoneNumber],
-                'dltTemplateId' => '1007289085098641045', // Welcome template ID
+                'dltTemplateId' => '1077445000020819206', // Welcome template ID
                 'entityId' => $this->config['DLTEntityID'],
                 'message' => $message,
-                'messageType' => 'SERVICE_EXPLICIT',
-                'sourceAddress' => 'PGDVTR' // Welcome template source address
+                'messageType' => 'SERVICE_IMPLICIT',
+                'sourceAddress' => 'PGDVNT' // Welcome template source address
             ];
 
             // Send request to Airtel SMS API

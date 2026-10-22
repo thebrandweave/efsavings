@@ -265,7 +265,7 @@ SMSAPIConfig
 1 row(s)
 
 ConfigID	APIProviderName	APIEndpoint	Username	Password	CustomerID	SourceAddress	DLTEntityID	DLTTemplateID	MessageType	MessageTemplate	Status	CreatedAt	UpdatedAt
-1	Airtel	https://iqsms.airtel.in/api/v1/send-prepaid-sms	f8758d62_260c_404b_8d4a_a15ce94593d4	jx0NgVQjBT	72c5ff0d-4624-4972-bc1c-dcef261dd7f7	PRGDVN	1001791223662244844	1007000046423973167	SERVICE_EXPLICIT	NULL	Active	2025-10-15 07:13:43	2026-01-10 17:24:19
+1	Airtel	https://iqsms.airtel.in/api/v1/send-prepaid-sms	f8758d62_260c_404b_8d4a_a15ce94593d4	jx0NgVQjBT	72c5ff0d-4624-4972-bc1c-dcef261dd7f7	PRGDVN	1001791223662244844	1007000046423973167	SERVICE_IMPLICIT	NULL	Active	2025-10-15 07:13:43	2026-01-10 17:24:19
 Schemes
 1 row(s)
 
