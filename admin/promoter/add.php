@@ -100,9 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = "Team name is required for new teams";
         }
 
-        if (!$isNewTeam && empty($parentPromoterID)) {
-            $errors[] = "Parent promoter is required";
-        }
+        // if (!$isNewTeam && empty($parentPromoterID)) {
+        //     $errors[] = "Parent promoter is required";
+        // }
 
         if (!$isNewTeam && empty($commission)) {
             $errors[] = "Commission is required";
