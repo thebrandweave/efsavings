@@ -399,7 +399,7 @@ include("../../components/topbar.php");
                 <div class="form-group">
                     <label for="message_type">Message Type</label>
                     <select id="message_type" name="message_type" class="form-control" required>
-                        <option value="SERVICE_IMPLICIT" <?php echo ($settings['MessageType'] ?? '') === 'SERVICE_IMPLICIT' ? 'selected' : ''; ?>>Service Explicit</option>
+                        <option value="SERVICE_IMPLICIT" <?php echo ($settings['MessageType'] ?? '') === 'SERVICE_IMPLICIT' ? 'selected' : ''; ?>>Service Implicit</option>
                         <option value="text" <?php echo ($settings['MessageType'] ?? '') === 'text' ? 'selected' : ''; ?>>Text</option>
                         <option value="unicode" <?php echo ($settings['MessageType'] ?? '') === 'unicode' ? 'selected' : ''; ?>>Unicode</option>
                     </select>
