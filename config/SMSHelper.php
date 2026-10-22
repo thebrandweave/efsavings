@@ -18,8 +18,8 @@ define('SMS_SOURCE_WELCOME', 'PGDVNT');
 
 // Template ID 1007000046423973167 - Payment received
 // "Dear var Thank you for choosing PROGEEDEE Ventures Private Limited Golden Dream Savings Plan We have received your payment of Rs var"
-define('SMS_TEMPLATE_PAYMENT_ID', '1007000046423973167');
-define('SMS_SOURCE_PAYMENT', 'PRGDVN');
+define('SMS_TEMPLATE_PAYMENT_ID', '1077380230008281956');
+define('SMS_SOURCE_PAYMENT', 'PDVTPL');
 
 /** Log file path (relative to this config folder) */
 define('SMS_LOG_FILE', __DIR__ . '/sms_log.txt');
@@ -220,7 +220,7 @@ function sendWelcomeSMSHardcoded($phoneNumber, $customerName, $customerUniqueID)
 }
 
 /**
- * Payment verified SMS - Template 1007000046423973167, PRGDVN
+ * Payment verified SMS - Template 1077380230008281956, PRGDVTPL
  * var1 = customer name, var2 = amount (no decimals)
  * Template: "Dear var Thank you for choosing PROGEEDEE Ventures Private Limited Golden Dream Savings Plan We have received your payment of Rs var"
  */
